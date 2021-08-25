@@ -1,0 +1,71 @@
+Hunters; snip-hunters; [spool, js]; #js#spool#snippet#hunters; 12-03-2020
+In this snippet, I am evolving simple agents for object finding. New version @@snip-hunters2@@.
+#^ Description
+At the start, you will experience a severe lag, this is caused by a lot of "food" being spawned at the start, so there is overpopulation. The overpopulation leads to a bigger gene pool. It will go away after a while.
+If you fail to see any improvements, restart the simulation. From the tests I have run, a noticeable improvement should arrive at around generation 20-30 (number in the top-left corner, note that the number may go up and down as it represents the "oldest" cell, if it dies, the number may go down) but it may arrive earlier.
+The reason for unpredictable results:
+>1 There is only one hidden layer in hunters' neural network
+>1 It is optimized only through mutation upon creation
+>1 The constants are not set in an optimal manner
+>1 Genetic drift (If only one cell survives, there will likely be food to support its offspring no matter its quality)
+If you want to hide the lines, you can press the spacebar.
+#^ Motivation
+I decided to rewrite the majority of @@spool@@, and I am currently working on math. Spool is mainly a small prototyping library and thus I am focusing mainly on the ease of use rather than on optimizing. I have decided that the main number container will be a new Tensor object that will be used for vectors, matrices, points, rectangles, polygons, etc. An interesting test for a tensor library is an implementation of a dense neural network.  
+#^ Neurons
+Each neuron outputs a value that is the result of applying an activation function to its inputs. In the majority of cases, it is a weighted sum of inputs. 
+///
+a = \sum_{j=0}^{|i|} i^jw^j
+///
+Note that in %%i^j%% j is not power but the superscript. I am reserving subscripts for layer indexes.
+Additionally, neurons usually have a constant that is added to the weighted sum called bias here as constant %%b%%.
+///
+a = \sum_{j=0}^{|i|} i^jw^j + b
+///
+The final step is adding an activation function, in my case a sigmoid function.
+///
+\sigma(x) = \frac{1}{1 + e^{-x}}
+///
+The final neuron output is calculated like so:
+///
+a = \sigma(\sum_{j=0}^{|i|} i^jw^j + b)
+///
+#^ Dense neural networks
+DNN is an artificial neural network composed of only dense layers, layers of neurons that are fully connected (their neighboring layers resemble a complete bipartite graph). Here is the calculation of the output value of %%k%%th neuron in layer %%a_l%%.
+///
+a_l^k = \sigma\Big(\sum_{j=0}^{m}a_{l - 1}^jw_{l - 1}^{j,k} + b_l^k\Big)
+/// 
+([><
+%%a_l^k%% - the kth neuron's output value in layer %%a_l%% where %%a_l%% are the %%l%%th layer's output values represented as a row vector.
+%%w_{l - 1}^{j,k}%% - the weight of connection between %%j%%th neuron from layer %%a_{l-1}%% and %%k%%th neuron from layer %%a_{l}%%.
+%%b_l^k%% - the bias of %%k%%th neuron's from layer %%a_{l}%%.
+%%m%% - the size of layer %%a_{l-1}%%.
+([r
+The main idea behind a dnn is that if you have layer %%a_{l-1}%% and layer %%a_l%%, they are fully connected, and thus there are %%|a_{l-1}|\times|a_l|%% connections present between them. You can represent these connections by a %%|a_{l-1}|\times|a_l|%% weights matrix in which each value represents how "important" one of the connections is. In my case, the value in %%j%%th row and %%k%%th column represents how much does %%j%%th neuron from %%a_{l-1}%% influences %%k%%th neurons in layer %%a_l%%. 
+///
+w_l = 
+\begin{pmatrix}
+w_l^{0,0} & w_l^{0,1} & \cdots & w_l^{1,n} \\
+w_l^{1,0} & w_l^{1,1} & \cdots & w_l^{2,n} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+w_l^{m,0} & w_l^{m,1} & \cdots & w_l^{m,n} 
+\end{pmatrix}
+///
+([><
+%%w_l%% - weights matrix that connects layer %%a_l%% to layer %%a_{l + 1}%%
+%%m = |a_{l-1}|%% - 1
+%%n = |a_{l}|%% - 1
+([r
+The main benefit of this orientation is in forwarding, a process in which you calculate the values of layer %%a_l%% based on the values of layer %%a_{l-1}%%. If you represent information on layer %%a_{l-1}%% as a one by %%|a_{l-1}|%% size matrix (matrix with one row and %%|a_{l-1}|%% columns, a row vector), the values of neurons on layer %%a_l%% are just activation function applied to the sum of bias matrix %%b_l%% and the dot product of layer %%a_{l-1}%% and weights matrix %%w_{l-1}%%.
+///
+a_l = \sigma\Big(a_{l - 1} \cdot w_{l - 1} + b_{l}\Big)
+/// 
+([><
+%%a_l%% - output values of %%l%%th layer in the shape of a row vector.
+%%w_{l - 1}%% - weights matrix connecting layer %%a_{l - 1}%% and layer %%a_{l}%%
+%%b_{l}%% - bias vector of layer %%a_l%% 
+%%\sigma%% - activation function (in my case sigmoid)
+([r
+#^ Hunter
+A hunter is a simple agent that needs energy to function. The moment his energy goes below zero, he "dies". 
+All his calculations are done by internal dnn that takes input from its eyes and returns one output that corresponds to the steering angle.
+Each tick, energy (sum of a constant and the steering angle) is subtracted from its internal energy counter. The moment this energy counter goes below, it "dies". If the agent collides with food, it absorbs its energy and divides (natural selection). The newly created offspring mutates upon creation to produce a small change to the weights and biases matrixes (reproduction).

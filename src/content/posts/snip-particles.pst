@@ -1,0 +1,23 @@
+Particles; snip-particles; [spool2, js]; #js#spool2#snippet#particles; 12-28-2020
+In this snippet, I am simulating simple particles using @@Lennard-Jones potential|https://en.wikipedia.org/wiki/Lennard-Jones_potential@@. I in no way understand the physics behind intermolecular interaction or nuclear forces. **I used said equations rather liberally**.  
+# Controls
+movement - dragging with the left mouse button pressed 
+zoom - dragging with the right mouse button pressed 
+# Interesting observations 
+In the original formula, the %%n%% is high (6), so the function is much sharper. That means that the attraction (part of the function below zero) goes away quickly (it becomes negligible). If you lower the %%n%% into the range 1-2, the attraction is present even for higher %%r%%. That usually means that the particles will attract each other no matter the distance. This results in a "glob" of particles in the center.
+
+Preset */star*/ is based on a low %%n%% and thus it produces said "glob", but an interesting one if I may say so myself. At first, the particles will come together to form a ball or a core. As the core becomes bigger a pressure builds up in the center causing heavier particles to form. The heavier particles not only have larger %%\sigma%% which means their forces are bigger, but also larger %%\varepsilon%% so they are more likely to repel. Because of this, they are moved first to the edge, where they form a crust around the core, later they form "arms".
+# Simulation
+The simulation is simple, for every particle pair on screen, calculate force using function %%f%% where:
+///
+f(r) = 4\varepsilon\Bigg[\Big(\frac{\sigma}{r}\Big)^{2n} - \Big(\frac{\sigma}{r}\Big)^n\Bigg]
+///
+([><
+%%\sigma = sC%%
+%%\varepsilon = eC%% - the point in which the function is equal to zero.
+%%C = \log_{2}(1 + m_1 + m_2)%% *-This is purely my invention*- 
+%%m_1, m_2%% - "mass" of particles
+%%n, e, s%% - controlled by sliders
+%%r%% - the distance between two particles
+([r
+

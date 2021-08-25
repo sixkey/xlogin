@@ -1,0 +1,5 @@
+Spool; spool; [node, js, socket.io]; #spool#node#js#socketio#multiplayer#gamedev; 09-01-2020
+#v Introduction
+Spool is a framework build on node.js, express and socket.io. It is made for hacking together simple .io style multiplayer games. The majority of code was build in one all-nighter so it lacks some important multiplayer features like client-side predictions.
+
+more coming soon, some info @@here|https://github.com/inkontext/spool/wiki@@

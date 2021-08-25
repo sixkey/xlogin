@@ -1,0 +1,5 @@
+Hunters 2; snip-hunters2; [spool, js]; #js#spool#snippet#hunters; 12-03-2020
+In this snippet, I am evolving simple agents for object finding. 
+# Description
+The second version of @@snip-hunters@@. The learning model is more supervised via curated natural selection. Each time hunter eats food, his fitness goes up. The evolution system grabs all hunters after a set period, picks the ones with the highest fitness (i.e. the highest number of eaten food), and populates a new generation by copying and mutating their genes.
+Hunters 2 also runs on a new ECS system added in spool2.

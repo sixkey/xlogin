@@ -1,0 +1,19 @@
+Boids; snip-boids; [spool, js]; #js#spool#snippet#boids; 12-03-2020
+Boids is a simple flocking algorithm based on:
+>> separation - separate from obstacles
+>> alignment - align with the nearby flock
+>> cohesion - steer towards the nearby flock. 
+More @@here|https://en.wikipedia.org/wiki/Boids@@.
+Made with @@spool@@
+## Controls 
+spacebar - show obstacle vision
+wasd - move the center ball
+## Console
+You can change the following constants using browser console:
+>> boidManager.cohesionCoef
+>> boidManager.alignmentCoef 
+>> boidManager.avoidanceCoef
+>> boidManager.vision
+>> boidManager.obstacleVision
+>> boidManager.obstacleWeight
+You can play with other parameters on your own discretion.

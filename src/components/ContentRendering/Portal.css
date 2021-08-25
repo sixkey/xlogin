@@ -1,0 +1,11 @@
+.portal-extended-shrthlink {
+    margin-left: -10em;
+    padding-right: 1em;
+    display: inline-block;
+    text-align: right;
+    width: 10em;
+}
+
+.portal-semiextended {
+    padding-right: 0.5em;
+}

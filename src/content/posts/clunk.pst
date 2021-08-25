@@ -1,0 +1,29 @@
+Clunk; clunk; [cpp]; #clunk#cpp#engine#opengl#glfw#glew#graphics#gravity#boids#dnn#neuralnetwork#cell; 09-01-2020
+# Introduction
+Clunk is a CPP graphic application engine based on @@Hazel|https://github.com/TheCherno/Hazel@@. Currently, it supports OpenGL via GLAD and GLFW. For the UI it uses ImGui.
+For me, clunk was a great way of learning some more advanced concepts of CPP and basics about graphics (shaders, etc.). Because this was a learning experience, a lot of the code is inherited from Hazel. I made some alterations in the event-handling system, introduced new primitives into 2D renderer and a simple ECS system based on @@this|https://austinmorlan.com/posts/entity_component_system/@@ post. I've also created some pre-made ECS systems for collision detection, very simple rendering, flocking behavior, and more.
+# Little projects
+## Quadtree
+Clunk has an implementation of a @@quadtree system|https://en.wikipedia.org/wiki/Quadtree#:~:text=A%20quadtree%20is%20a%20tree,into%20four%20quadrants%20or%20regions.@@. Even though chunk segmentation would be probably fine, I wanted to try something different.
+This quadtree is used in a quadtree system. The system provides the quadtree with information about the entities via forwarding their transform component and in exchange, it provides our ECS coordinator with the ability to quickly find entities in an area.
+## PhysicsSystem (Gravity)
+I.e. a very simple implementation of 2D gravity. Every time I start doing graphics, I try the basics out by simulating the creation of a solar system. The idea is simple. You create a bunch of particles and let @@Newton's gravity equation|Newton's gravity equation@@ do its thing. Even though clunk isn't the most optimized engine, it is capable of simulating thousands of particles in real-time thanks to batch renderer from Hazel and a quadtree system. 
+::gravity|/images/clunk-gravity.gif|Gravity simulation|400::
+Note: the simulation is cutting corners by ignoring planets that are too far away to cause any real force.
+## Boids 
+@@Boids|https://en.wikipedia.org/wiki/Boids@@ is a simple flocking simulation based on three rules: separation, alignment, and cohesion. Implementing such a system is easy, thanks to the previously mentioned ECS.
+::boids|/images/clunk-boids.gif|Boids|400::
+## Unsupervised learning
+By using, perhaps the most simple unsupervised learning model - @@GA|https://en.wikipedia.org/wiki/Genetic_algorithm@@, I've created a simple evolution simulation. The "organism" we are trying to optimize is a simple "cell". 
+### Cell
+Our cell is a 2d agent capable of simple sight, information processing, and movement. Sight is provided via an array of rays. Rays are just evenly spread lines, going from the center outwards with a finite size (vision constant). If a ray collides with an object, the percentage of the line between the start and the collision point is sent to the cell's input port in its processing unit. 
+Cell's information processing is done in a dense neural network. The size and number of hidden layers are defined in the cell's DNN component, so they are constants and not part of the evolution. DNN contains one input for every eye and a single output.
+This output is connected to the cell's steering. Cells move with a constant velocity and control only their movement's steering. Each tick, the output from the DNN is added to the cells steering angle.
+### Genetic algorithm
+The machine learning algorithm I used is perhaps the most simple unsupervised model, @@GA|https://en.wikipedia.org/wiki/Genetic_algorithm@@. In our case, the genome is defined as an array of chromosomes in which each chromosome represents either DNN's weights or a biases matrix compressed into a vector. The act of reproduction is only a process of copying the genome and applying mutation function to each chromosome where mutation function is a function that alters each value in the chromosome slightly.
+Here are rules that provide natural selection:
+>1 Each tick, each cell's energy is subtracted
+>1 If a cell eats food, it produces offspring, and energy is added
+>1 If a cell's energy hits zero, the cell dies
+These simple rules together with a DNN is enough to produce cells that are *relatively* capable of finding food.
+::cells|/images/clunk-ga-2.gif|Cells|500::

@@ -1,0 +1,24 @@
+.page-header {
+    padding-top: 15vh;
+    padding-bottom: 10vh;
+}
+
+.header-logo {
+    height: 5em;
+}
+
+.header-logo-wrapper { 
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link-row {
+    display: flex;
+
+}
+
+.link-row * {
+    display: flex;
+    padding: 0px 0.4em 0px 0em;   
+}

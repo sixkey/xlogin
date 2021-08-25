@@ -1,0 +1,25 @@
+{
+    "sections": {
+        "large": {
+            "title": "Large",
+            "posts": ["clunk", "trevo"]
+        },
+        "snippets": {
+            "title": "Snippets",
+            "posts": ["snip-boids", "snip-hunters", "snip-hunters2", "snip-particles", "snip-astar", "snip-cars"]
+        },
+        "comingsoon": {
+            "title": "Coming soon",
+            "posts": [
+                "sixgen",
+                "axiol",
+                "spool",
+                "scaretycoon",
+                "nhi",
+                "priiivat",
+                "cah",
+                "lebac"
+            ]
+        }
+    }
+}

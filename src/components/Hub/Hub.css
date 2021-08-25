@@ -1,0 +1,26 @@
+.hublogo {
+    width: 50%;
+    max-width: 120px;
+    margin: auto;
+}
+
+.hublogo>img {
+    width: 100%;
+}
+
+.float-hardright {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.pos-relative {
+    position: relative;
+}
+
+.hub-search {
+    max-width : 500px;
+    margin:1em;
+    margin-left:auto;
+    margin-right:auto;
+}

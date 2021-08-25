@@ -1,0 +1,2 @@
+A*; snip-astar; [spool, js]; #js#spool#snippet#astar#pathfinding#graphs; 1-24-2021
+In this snippet I've implemented simple @@A* algorithm|https://en.wikipedia.org/wiki/A*_search_algorithm@@. I've introduced graphs and collections (currently only Heap) to @@spool@@.

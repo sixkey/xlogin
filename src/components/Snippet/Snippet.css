@@ -1,0 +1,11 @@
+.spool-canvas-godown {
+    position: absolute;
+    bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: black;
+    font-size: 2em;
+}

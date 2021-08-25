@@ -1,0 +1,57 @@
+.post ol {
+    list-style: none;
+    counter-reset: item;
+}
+
+.post h1,.post h2, .post h3, .post h4, .post h5, .post h6 {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+} 
+
+.post .nhi-h1,.post .nhi-h2, .post .nhi-h3, .post .nhi-h4, .post .nhi-h5, .post .nhi-h6 {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+} 
+
+.post ol li {
+    counter-increment: item;
+    margin-bottom: 5px;
+    padding-left: 1.3em;
+}
+
+.post ol li:before {
+    content: counter(item) ")";
+    display: inline-block;
+    margin-left: -1.3em;
+    /* same as padding-left set on li */
+    width: 1.3em;
+}
+
+.post ul li {
+    margin-bottom: 5px;
+    padding-left: 1.3em;
+    list-style: none;
+}
+
+.post ul li:before {
+    content: '•';
+    display: inline-block;
+    margin-left: -1.3em;
+    /* same as padding-left set on li */
+    width: 1.3em;
+}
+
+.nhi-p {
+    text-align: justify;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+}
+
+.content-rendering-gallery {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.content-rendering-gallery * {
+    max-width: 100%;
+}

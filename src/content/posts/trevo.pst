@@ -1,0 +1,134 @@
+Trevo; trevo; [Java]; #trevo#java#sixgen#geneticalgorithm#2dgraphics; 09-01-2020
+# Introduction
+Trevo is an evolution simulation made in @@sixgen@@, that focuses on optimizing 2D tree-like structures for ideal energy input and output.
+#^ Development
+I started developing Trevo in the winter of 2016 and worked on it on and off for about two years. 
+## Different versions of trevo
+::firstversion|images/trevo-ver10.png|4.11.2016: Version 0.1.0|300::
+::secondversion|images/trevo-ver11.png|15.12.2016: Version 0.1.1|300:: 
+::thirdversion|images/trevo-ver13.png|1.1.2017: Version 0.1.3|300:: 
+::fourthversion|images/trevo-ver15.png|7.1.2017: Version 0.1.5|300::
+## FVAT
+Thanks to the my computer science teacher, we've registered Trevo for @@FVAT|https://www.festivalvedy.sk/wp2/@@. 
+Trevo was a success at the regional level moved into the national round from which it was sent to EUCYS 2018 in Dublin. Even though it didn't receive one of the main prizes, It received a donated prize from @@PRACE|https://prace-ri.eu/@@.
+::posters|images/trevo-posters.png|Trevo's posters from EUCYS|::
+#^ Trevo
+## SixGen
+Trevo is written in Java and uses @@sixgen@@, our Java-based game engine. 
+## Main concept
+Trevo is mainly about visualizing GA by optimizing 2D geometry.  
+## Trees
+In Trevo, we are representing trees as 2D structures made out of vertices and their connections (branches). Each vertex that doesn't have any children becomes a leaf. Trees are procedurally generated from their genome.
+### Genome 
+The genome of a tree is represented as a single chromosome, I.e. a simple array of integers. Each value in the array corresponds to some trait of the tree. 
+::chromosome|images/trevo-chromosome.png|Indexed genes and traits they describe|400::
+The majority of genes come in pairs. Each pair represents a range of possible values from which the real value is picked.
+### Procedural generation
+Trees are generated from their genome by the following algorithm:
+>1 Add a root vertex
+>1 Create a stem by extruding the root vertex
+>1 Take a vertex from the queue
+>1 If the depth (distance in graph to the root) of the vertex is smaller than the max level (written in the gene), create branches and add their ends to the queue, else add to the list of leaves
+>1 Jump to part 3 if the queue is not empty
+### Genetic algorithm
+Evolution is based on three main principles: natural selection, reproduction, and genetic drift. The last part is somewhat nondesirable because it brings regression and stagnation to small populations. For that reason, I've implemented only the first two principles.
+#### Natural selection
+In our case, we opted for selection via a fitness function. Our fitness function simulates one moment of "sunlight" and calculates the trees energy IO coefficient. Two trees with the highest fitness values are first copied to the new generation to avoid any regression and then bred to fill out the population to the original size. The previous generation is discarded. 
+#### Fitness function
+In Trevo, fitness is determined by the energy IO coefficient. 
+First, we calculate the energy input by multiplying the number of live leaves by a leaf's energy per tick constant. To determine which leaves are "alive" we: 
+>1 look if the leaf is not below the "herbivore level" (a height reachable by virtual animals)
+>1 look at any collision with nearby leaves. 
+>1 cast a ray going from the leaf "up" and look for a collision with any other branch
+If the leaf is below the "herbivore level" or there is a collision, it is dead and thus ignored in calculating energy input.  
+Second, we calculate the energy output by adding together the lengths of branches and multiply the sum by the consumption constant.
+Last, we divide the input by the output and have our fitness.
+Here is fitness function written as %%f(B, L)%% where %%B%% is the list of branches, %%L%% is the list of leaves, %%E_{in}%% is the energy input constant and %%E_{out} %% is the energy output constant.
+///
+f(B, L)=\frac{E_{in} \cdot \sum_{i=0}^{|L|-1}alive(L_i)}{1 + E_{out} \cdot \sum_{i=0}^{|B|-1}length(B_i)}
+///
+///
+alive(l)= 
+\begin{cases}
+    1& \text{if l is alive} \\
+    0& \text{otherwise}
+\end{cases}
+///
+#### Reproduction
+In our case, every tree has only one chromosome with a fixed size of genes, so reproduction is relatively easy. 
+>1 You take two individuals
+>1 For every chromosome in parent A you take the corresponding chromosome in parent B and apply a crossover function
+>1 You apply mutation function to every newly created chromosome.
+#### Crossover function
+The point of the crossover function is to create a new chromosome by combining two or more chromosomes. If you have two chromosomes with the same size, you will generate a new chromosome of the same size where for every gene in the chromosome, %%C_i = A_i%% or %%C_i = B_i%% where %%C%% is the offspring chromosome and both %%A%% and %%B%% are the chromosome of its parents.
+The simplest approach is picking the parent from which the gene is, for every gene randomly. This approach is not optimal for keeping long strings of genes from a parent.
+///
+C_i = 
+\begin{cases}
+    A_i& R_i = 1 \\
+    B_i& \text{othwerise}
+\end{cases} 
+///
+([><
+%%R%% is a pseudo-random sequence of ones and zeroes with the same length as %%A%% and %%B%%
+([r
+For chromosomes with traits defined by long gene-blocks, there is an actual crossing method. In this method, you generate N unique crossing points, in which you switch between the parents. 
+///
+C_i = 
+\begin{cases}
+    A_i& \Big\vert\big\lbrace p \bigm\vert p\in P \land p <= i \big\rbrace\Big\vert \mod 2 = 1 \\
+    B_i& \text{othwerise}
+\end{cases} 
+///
+([><
+%%P%% is a set of crossing points
+([r
+#### Mutation function
+Mutation function is a function that alters chromosomes slightly.  
+First solution is to alter every element of the chromosome slightly.
+///
+G_i = m(C_i) 
+///
+([><
+%%m%% is a mutation function
+([r
+Second is to only pick N random values and mutate only them.
+///
+G_i = 
+\begin{cases}
+    m(C_i)& i \in P \\
+    C_i& \text{otherwise}
+\end{cases} 
+///
+([><
+%%m%% is a mutation function and %%P%% is a set of indexes we want to mutate
+([r
+
+
+#^ Trevo in action
+## Screens
+### Main screen
+The main screen contains the evolution simulation. On the left, there is a panel with the mutation rates for different genes, on the right, there are minimum requirements, history settings, and a speed slider, and on the top, there is the main navigation.
+::mainscreen|images/trevo-mainscreen.png|Main screen|300::
+#### Response to animals
+This example demonstrates trees' capability of adapting to animals. The rising red bar is the "herbivore level" I.e. the rising minimum y-coordinate that the leaf has to have for it to survive.
+::trevoinaction|images/trevo-inaction.gif|Adaptation to animals|400::
+### History
+Each individual that breaks the fitness record is automatically inserted into history, but trees can be also saved manually or periodically from the main screen. 
+::history|images/trevo-comparison.png|History screen|300::
+In some cases, trees with lower average fitness can win in a "forest" setting. Usually, this happens between a tree-like plant and a grass-like plant. The "tree" has a taller body and thus a higher energy consumption and lower fitness. The reason it still wins is that its higher positioned branches cast a "shadow" on the lower situated leaves below, removing the grass-like plant's source of energy and thus lowering its fitness.
+::duel|images/trevo-duel.png|Duel|300::
+In default, Trevo treats every tree as a structure in a vacuum. If you want to enable global shadow checking, you can turn it on by toggling the 'Check with world' switch on the main screen.
+### Genome analysis
+If you are interested in the genome analysis of a plant, you can visit the genome analysis screen.
+On the left, there are the gene values and the traits they represent. In the center, there are three possible products of the generation function with the currently analyzed genome as an argument. The plant on the very right is the original owner of the genome. 
+The values above the plants are their fitness value. 
+::genome|images/trevo-genome.png|Genome analysis screen|300::
+#^ Final words
+The majority of limitation features were added to make the structures look like actual trees. When you look at the fitness function, you'll quickly realize that one way of maximizing fitness is minimizing the denominator, I.e. the body size. Thus every simulation without limitations results in a population of grass. To get rid of this problem I first played around with the energy constants then added minimal requirements, and finally introduced "herbivores." 
+Because of this struggle, I use the word tree and the word plant interchangeably. Technically Trevo is capable of creating structures that resemble other plants, thus calling them trees wouldn't be general enough, but at a mathematical level, they are still tree graphs, so it's ok.
+#^ Downloads
+$VV$ downloads/trevo.jar|Trevo
+$VV$ downloads/trevo_a010.jar|Trevo a 0.1.0
+$VV$ downloads/trevo_a013.jar|Trevo a 0.1.3
+$VV$ downloads/trevo_a015.jar|Trevo a 0.1.5

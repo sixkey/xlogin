@@ -1,0 +1,38 @@
+
+.home {
+    padding-bottom:20vh;
+}
+
+.home-section {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.contacts {
+    display: flex;
+    justify-content: center;
+}
+
+.contacts > *{
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+.contacts {
+    margin-top: 1em;
+    font-size: 3em;
+}
+
+.home-alert {
+    z-index: 100;
+    position:fixed;
+    right: 1em;
+    bottom: 1em;
+    margin: 0px;
+}
+
+.go-to-top {
+    position:fixed;
+    top:1em;
+    left:1em;
+    font-size:1.5em;
+}

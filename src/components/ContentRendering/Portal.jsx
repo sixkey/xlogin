@@ -3,8 +3,6 @@ import { Tooltip } from "reactstrap";
 
 import { Container } from "reactstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import "./Portal.css";
 import { getStaticPath } from "libs/paths";
 import { getPostPath } from "libs/paths";

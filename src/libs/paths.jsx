@@ -1,5 +1,5 @@
 export const getStaticPath = (path) => {
-    return `/${path}`;
+    return `${path}`;
 };
 
 export const getPathMixed = (item) => {

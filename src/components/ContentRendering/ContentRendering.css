@@ -6,12 +6,18 @@
 .post h1,.post h2, .post h3, .post h4, .post h5, .post h6 {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+    text-align: left;
 } 
 
 .post .nhi-h1,.post .nhi-h2, .post .nhi-h3, .post .nhi-h4, .post .nhi-h5, .post .nhi-h6 {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+    text-align: left;
 } 
+
+.post ol {
+    text-align: left;
+}
 
 .post ol li {
     counter-increment: item;

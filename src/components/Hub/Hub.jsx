@@ -2,8 +2,6 @@ import React, { Component, Fragment } from "react";
 
 import { Container, Row, Col, FormGroup, Input, Label } from "reactstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import { renderLink, getBootstrapSizeTags } from "libs/rendering.jsx";
 
 import { Animated } from "react-animated-css";
@@ -67,7 +65,7 @@ class Hub extends Component {
         if (
             !hardAccept &&
             (!searchTerm ||
-                (document.getElementById("search")
+                (typeof document !== 'undefinde' && document.getElementById("search")
                     ? document.getElementById("search").value.length < 1
                     : searchTerm.length < 1))
         ) {

@@ -2,8 +2,6 @@ import React, { Component, Fragment } from "react";
 
 import { Container, UncontrolledCollapse, Button } from "reactstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import "./ContentRendering.css";
 
 import Portal from "./Portal";

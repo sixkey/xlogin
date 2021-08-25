@@ -3,16 +3,18 @@ import { getStaticPath } from "./paths";
 
 const useScript = (url) => {
     useEffect(() => {
-        const script = document.createElement("script");
+        if (typeof document !== 'undefined') {
+            const script = document.createElement("script");
 
-        script.src = getStaticPath(url);
-        script.async = true;
+            script.src = getStaticPath(url);
+            script.async = true;
 
-        document.body.appendChild(script);
+            document.body.appendChild(script);
 
-        return () => {
-            document.body.removeChild(script);
-        };
+            return () => {
+                document.body.removeChild(script);
+            };
+        }
     }, [url]);
 };
 

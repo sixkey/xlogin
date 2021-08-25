@@ -1,24 +1,23 @@
-import "./App.css";
-import "./index.css";
-import "./components/ContentRendering/nhi.css";
 
-import Footer from "components/Footer/Footer";
-import Router from "components/Router/Router";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import React, { Component } from 'react'
+import {Root, Routes} from "react-static";
 
-import { BrowserRouter, Route } from "react-router-dom";
+import "./App.css";
+import "./components/ContentRendering/nhi.css";
+import "./index.css";
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <div className="app-body">
-                    <BrowserRouter>
-                        <Route component={Router} />
-                    </BrowserRouter>
+            <Root>
+                <div className="content">
+                    <React.Suspense fallback={<em>Loading...</em>}>
+                        <Routes path="*" />
+                    </React.Suspense>
                 </div>
-                <Footer></Footer>
-            </div>
+            </Root>
         );
     }
 }

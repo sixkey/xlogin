@@ -1,0 +1,3 @@
+[submodule "public/snippets"]
+	path = public/snippets
+	url = git@github.com:sixkey/snippets

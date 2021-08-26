@@ -20,7 +20,7 @@ import XLogo from "components/XLogo/XLogo";
 export default function Header(props) {
     const { links } = props;
     return (
-        <Animated isVisible={loaded} animateOnMount={false}>
+        <Animated animateOnMount={false}>
             <Container className="page-header">
                 <div className="header-logo-wrapper">
                     {/* <img

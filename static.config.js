@@ -14,6 +14,8 @@ import {isSnippetKey, galleryItemFunction} from './src/libs/paths'
 
 
 export default {
+    basePath: '~xkucerak',
+    devBasePath: '', 
     getSiteData: () => ({ 
         title: title, 
         owner: owner,
@@ -21,6 +23,8 @@ export default {
         publicUrl: publicUrl
     }), 
     getRoutes: async () => {
+
+    console.log(process.env.PUBLIC_URL)
 
     const galleryItemFunctionInstance = galleryItemFunction(icons, absent, posts)
     const postsLight = {}
@@ -86,7 +90,7 @@ export default {
         <Head>
             <meta charSet="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <base href={publicUrl}/>
+            <base href={`${publicUrl}/`}/>
             <meta
               name="description"
               content={desc}

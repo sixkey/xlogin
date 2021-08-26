@@ -6,7 +6,7 @@
 // Get started at https://react-static.js.org
 
 import path from 'path'
-import { owner, title, desc, publicUrl } from './xlogconf.json'
+import { owner, title, desc, basePath, devBasePath } from './xlogconf.json'
 import { posts, sections } from './content/posts.json'
 import { icons, absent } from './content/icons.json'
 import React from 'react'
@@ -14,17 +14,14 @@ import {isSnippetKey, galleryItemFunction} from './src/libs/paths'
 
 
 export default {
-    basePath: '~xkucerak',
-    devBasePath: '', 
+    basePath: basePath,
+    devBasePath: devBasePath, 
     getSiteData: () => ({ 
         title: title, 
         owner: owner,
-        desc: desc,
-        publicUrl: publicUrl
+        desc: desc
     }), 
     getRoutes: async () => {
-
-    console.log(process.env.PUBLIC_URL)
 
     const galleryItemFunctionInstance = galleryItemFunction(icons, absent, posts)
     const postsLight = {}
@@ -83,8 +80,12 @@ export default {
   ],
   Document: ({Html, Head, Body, children, state, renderMeta}) => {
         
-      let { desc, publicUrl, title } = state.siteData;
+      let { desc, title } = state.siteData;
 
+
+      var publicUrl = process.env.NODE_ENV === 'development' ? devBasePath : basePath; 
+
+      console.log(publicUrl)
       return (
     <Html>
         <Head>

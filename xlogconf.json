@@ -1,7 +1,8 @@
 { 
    "title": "xkucerak",
    "desc": "filip kucerak", 
-   "publicUrl": "/~xkucerak", 
+   "basePath": "/~xkucerak", 
+   "devBasePath": "",
    "owner":{
        "uco": "514391",
        "contacts": {

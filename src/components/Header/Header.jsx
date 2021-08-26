@@ -41,7 +41,9 @@ class Header extends Component {
                             alt=""
                         /> */}
                         <div className="header-logo" style={{ height: "9em" }}>
-                            <XLogo code="514391" size="9em" />
+                            <a href="/">
+                                <XLogo size="9em" />
+                            </a>
                         </div>
                         <div>
                             <h1 className="mb-0">xkucerak</h1>

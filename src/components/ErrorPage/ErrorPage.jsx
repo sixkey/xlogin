@@ -3,52 +3,39 @@
 //// EXTERNAL ////
 
 // React
-import Hub from "components/Hub/Hub";
-import React, { Component, Fragment } from "react";
-
-// Reactstrap
-import { Col, Container, Row } from "reactstrap";
-import { posts, sections } from "content/posts.json";
-import { getStaticPath } from "libs/paths";
+import React from "react";
+import XLogo from 'components/XLogo/XLogo';
+import XHub from "components/Hub/XHub.jsx";
+import {useRouteData} from "react-static";
 
 //// INTERNAL ////
 
 ////// COMPONENT //////
 
-class ErrorPage extends Component {
-    //// LIFECYCLE ////
-    //// RENDERING ////
-    render() {
-        return (
-            <div className="full-screen">
-                <Hub
-                    extended={false}
-                    posts={posts}
-                    sections={sections}
-                    renderTitle={() => {
-                        return (
-                            <div>
-                                <a href={getStaticPath("")}>
-                                    <img
-                                        src={getStaticPath("logo500.png")}
-                                        style={{
-                                            marginTop: "-8.5em",
-                                            height: "8em",
-                                        }}
-                                        alt=""
-                                    />
-                                </a>
-                                <h1>{this.props.error}</h1>
+export default function ErrorPage(props) {
+    let { posts, sections } = useRouteData();
+
+    return (
+        <div className="full-screen">
+            <XHub
+                extended={false}
+                posts={posts}
+                sections={sections}
+                renderTitle={() => {
+                    return (
+                        <div>
+                            <div className="header-logo-wrapper">
+                                <div className="header-logo" style={{ height: "9em" }}>
+                                    <a href="/">
+                                        <XLogo code="514391" size="9em" />
+                                    </a>
+                                </div>
                             </div>
-                        );
-                    }}
-                ></Hub>
-            </div>
-        );
-    }
-    //// MISC ////
+                            <h1>{props.error}</h1>
+                        </div>
+                    );
+                }}
+            ></XHub>
+        </div>
+    );
 }
-
-////// EXPORTS //////
-
-export default ErrorPage;

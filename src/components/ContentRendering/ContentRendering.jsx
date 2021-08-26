@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from "react";
 
-import { Container, UncontrolledCollapse, Button } from "reactstrap";
+import { Container } from "reactstrap";
 
 import "./ContentRendering.css";
 
-import Portal from "./Portal";
-
 import PropTypes from "prop-types";
-import { getStaticPath } from "libs/paths";
 import LatexExpression from "./LatexExpression";
-import DownloadButton from "./DownloadButton";
 import Table from "./Table";
 import NhiContainer from "./NhiContainer";
 

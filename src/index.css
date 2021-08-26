@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.text-right {
+    text-align: right
+}
+
 .w100 {
   width: 100% !important;
 }
@@ -49,4 +53,8 @@ html {
   -moz-user-select: none; 
   -ms-user-select: none; 
   user-select: none;
+}
+
+.nowrap {
+    white-space:nowrap;
 }

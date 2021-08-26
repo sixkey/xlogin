@@ -6,9 +6,6 @@
 import { getStaticPath } from "libs/paths";
 import React, { Component, Fragment } from "react";
 
-// Reactstrap
-import { Container } from "reactstrap";
-
 //// INTERNAL ////
 
 import "./Gallery.css";

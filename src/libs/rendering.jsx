@@ -111,7 +111,7 @@ export function renderLine(line) {
 }
 
 export function getBootstrapSizeTags() {
-    const srcWidth = window.innerWidth;
+    const srcWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
     return {
         xs: true,
         sm: srcWidth >= 576,

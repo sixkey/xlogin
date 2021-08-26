@@ -11,12 +11,12 @@ import { Container, Alert } from "reactstrap";
 //// INTERNAL ////
 import Header from "components/Header/Header.jsx";
 import ProjectLibrary from "components/ProjectLibrary/ProjectLibrary.jsx";
+import Contacts from 'components/Contacts/Contacts.jsx';
 import { Animated } from "react-animated-css";
 
 import "./Home.css";
 import ColumnAnimator from "components/ColumnAnimator/ColumnAnimator";
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 ////// COMPONENT //////
 
@@ -50,6 +50,12 @@ class Home extends Component {
 
     render() {
         let { loading, alert, alertVisible, goUpVisible } = this.state;
+       
+        var hashtag = null;
+        if(typeof window !== 'undefined') {
+            var query = new URLSearchParams(window.location.search);
+            hashtag = query.has('hashtag') ? query.get('hashtag') : null;
+        }
 
         if (loading) {
             return null;
@@ -84,35 +90,12 @@ class Home extends Component {
                     <div className="home-section">
                         <a name="projects"></a>
                         <ProjectLibrary
-                            searchTerm={this.props.hashtag}
+                            searchTerm={hashtag}
                         ></ProjectLibrary>
                     </div>
                     <div className="home-section">
                         <a name="contacts"></a>
-                        <h2>Contacts</h2>
-                        <div className="contacts">
-                            <a href="https://github.com/sixkey">
-                                <i className="fab fa-github"></i>
-                            </a>
-                            <span className="a">
-                                <CopyToClipboard
-                                    text={"514391@mail.muni.cz"}
-                                    onCopy={() => {
-                                        this.setState({
-                                            alert: "email copied",
-                                            alertVisible: true,
-                                        });
-                                        setTimeout(() => {
-                                            this.setState({
-                                                alertVisible: false,
-                                            });
-                                        }, 3000);
-                                    }}
-                                >
-                                    <i className="fas fa-at"></i>
-                                </CopyToClipboard>
-                            </span>
-                        </div>
+                        <Contacts/>
                     </div>
                 </ColumnAnimator>
             </Container>

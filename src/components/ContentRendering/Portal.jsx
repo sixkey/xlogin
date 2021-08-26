@@ -34,6 +34,7 @@ class Portal extends Component {
             brackets = true,
             underlining = false,
             textAligned = true,
+            nowrap = false,
         } = this.props;
 
         if (!link) {
@@ -75,7 +76,7 @@ class Portal extends Component {
                     <span>
                         {leftBracket}
                         <a
-                            className={`a ${underlining ? "nhi-u" : ""}`}
+                            className={`${nowrap ? 'nowrap' : ''} a ${underlining ? "nhi-u" : ""}`}
                             href={link}
                             id={id}
                         >

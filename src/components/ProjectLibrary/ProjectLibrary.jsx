@@ -10,52 +10,28 @@ import React, { Component, Fragment } from "react";
 import { Container } from "reactstrap";
 
 //// INTERNAL ////
-import { posts, sections } from "content/posts.json";
-import Hub from "components/Hub/Hub";
-
-import { icons, absent } from "content/icons.json";
-import { getStaticPath } from "libs/paths";
-import { getPostPath, getSnipPath } from "libs/paths";
-import { getPathMixed } from "libs/paths";
-import HashtagList from "components/HashtagList/HashtagList";
-
-import { languages } from "content/popular-hashtags.json";
-
+import XHub from "components/Hub/XHub.jsx";
 import "./ProjectLibrary.css";
+import {useRouteData} from "react-static";
+import {galleryItemFunction} from "../../libs/paths";
+
 
 ////// COMPONENT //////
 
-class ProjectLibrary extends Component {
-    //// LIFECYCLE ////
-    //// RENDERING ////
-    render() {
-        return (
-            <Container>
-                <Hub
-                    posts={posts}
-                    sections={sections}
-                    extended={true}
-                    renderTitle={() => {
-                        return <h2>Projects</h2>;
-                    }}
-                    searchTerm={this.props.searchTerm}
-                    renderPostsSearch={this.renderPostsSearch}
-                    renderPostsSection={this.renderPostsSection}
-                ></Hub>
-            </Container>
-        );
-    }
 
-    renderPostsSearch(posts, sections, postKeys, extended, lg) {
+function createPostsSearch(icons, absent) {
+    return (posts, sections, postKeys, extended, lg) => {
         return (
             <Gallery
                 items={postKeys}
-                itemFunction={galleryItemFunction}
+                itemFunction={galleryItemFunction(icons, absent, posts)}
             ></Gallery>
         );
     }
+}
 
-    renderPostsSection(posts, sections, postKeys, extended, lg) {
+function createPostsSection(icons, absent) { 
+    return (posts, sections, postKeys, extended, lg) => {
         return (
             <Fragment>
                 {Object.keys(sections).map((key, index) => (
@@ -63,35 +39,32 @@ class ProjectLibrary extends Component {
                         <h3 className="py-2">{sections[key].title}</h3>
                         <Gallery
                             items={sections[key].posts}
-                            itemFunction={galleryItemFunction}
+                            itemFunction={galleryItemFunction(icons, absent, posts)}
                         ></Gallery>
                     </div>
                 ))}
             </Fragment>
         );
     }
-    //// MISC ////
 }
-
-export const galleryItemFunction = (item) => {
-    console.log(item)
-    if (absent.includes(item)) {
-        return {
-            src: `images/${item}.png`,
-            logoSrc: null,
-            link: getPathMixed(item),
-            imgClassName: icons[item] ? icons[item] : "",
-            titleElem: <h3 className="absent-title">{posts[item].title}</h3>,
-        };
-    } else {
-        return {
-            src: `images/${item}.png`,
-            logoSrc: `images/${item}-logo.png`,
-            link: getPathMixed(item),
-            imgClassName: icons[item] ? icons[item] : "",
-        };
-    }
-};
+function ProjectLibrary (props) {
+    let {posts, sections, icons, absent} = useRouteData();
+    return (
+        <Container>
+            <XHub
+                posts={posts}
+                sections={sections}
+                extended={true}
+                renderTitle={() => {
+                    return <h2>Projects</h2>;
+                }}
+                searchTerm={props.searchTerm}
+                renderPostsSearch={createPostsSearch(icons, absent, posts)}
+                renderPostsSection={createPostsSection(icons, absent, posts)}
+            ></XHub>
+        </Container>
+    );
+}
 
 ////// EXPORTS //////
 

@@ -3,13 +3,10 @@
 //// EXTERNAL ////
 
 // React
-import ErrorPage from "components/ErrorPage/ErrorPage";
 import PostPage from "components/PostPage/PostPage";
 import useScript from "libs/scripts";
-import React, { Component, Fragment } from "react";
-
-// Reactstrap
-import { Container } from "reactstrap";
+import React, { Fragment } from "react";
+import {useRouteData} from "react-static";
 
 //// INTERNAL ////
 
@@ -18,9 +15,9 @@ import "./Snippet.css";
 ////// COMPONENT //////
 
 const SpoolCanvas = (props) => {
-    const { id } = props;
+    const { snippetName } = props;
 
-    useScript(`snippets/${id}/${id}.min.js`);
+    useScript(`snippets/${snippetName}/${snippetName}.min.js`);
 
     return (
         <div id="spool-root" style={{ width: "100%", overflow: "hidden" }}>
@@ -33,37 +30,17 @@ const SpoolCanvas = (props) => {
     );
 };
 
-const Snippet = (props) => {
-    const { id } = props;
-
-    if (!id) {
-        return <ErrorPage error="Invalid url"></ErrorPage>;
-    }
-
-    if (
-        ![
-            "boids",
-            "hunters",
-            "hunters2",
-            "particles",
-            "astar",
-            "cars",
-        ].includes(id)
-    ) {
-        return <ErrorPage error="Snippet not found"></ErrorPage>;
-    }
-
+export default function Snippet(props) {
+    const { postid } = useRouteData();
+    const snippetName = postid.substring(5)
     return (
         <Fragment>
-            <SpoolCanvas id={id} link={"#post-start"}></SpoolCanvas>
+            <SpoolCanvas snippetName={snippetName} link={"#post-start"}></SpoolCanvas>
             <a name="post-start"></a>
-            <PostPage postid={`snip-${id}`}></PostPage>
+            <PostPage/>
         </Fragment>
     );
 
     //// MISC ////
 };
 
-////// EXPORTS //////
-
-export default Snippet;

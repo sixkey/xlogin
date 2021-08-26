@@ -72,7 +72,7 @@ class Hub extends Component {
             postKeys = Object.keys(posts);
             postKeys = postKeys
                 .sort((a, b) => {
-                    return a < b;
+                    return b.localeCompare(a);
                 })
                 .reverse();
         } else {
@@ -132,7 +132,7 @@ class Hub extends Component {
                 .sort((a, b) => {
                     if (a.priority < b.priority) return -1;
                     if (a.priority > b.priority) return 1;
-                    if (a.priority === b.priority) return a.key > b.key;
+                    if (a.priority === b.priority) return b.localeCompare(a);
                 })
                 .map((value) => value.key);
         }
@@ -146,27 +146,21 @@ class Hub extends Component {
 
     renderPostsSearch(posts, sections, postKeys, extended, lg) {
         const { keyToLink } = this.props;
-
+        const wrapper = (children) => (extended
+            ? <div className="py-1">{children}</div> 
+            : <Fragment>{children}</Fragment>)
         return (
             <Fragment>
                 {postKeys.map((value, index) => (
                     <Fragment key={index}>
-                        {extended ? (
-                            <div className="py-1">
+                        {wrapper(
                                 <Portal
                                     text={value}
                                     title={posts[value].title}
                                     link={keyToLink(value)}
                                     extended={extended}
+                                    nowrap={true}
                                 ></Portal>
-                            </div>
-                        ) : (
-                            <Portal
-                                text={value}
-                                title={posts[value].title}
-                                link={keyToLink(value)}
-                                extended={extended}
-                            ></Portal>
                         )}
                     </Fragment>
                 ))}
@@ -285,7 +279,7 @@ class Hub extends Component {
 }
 
 Hub.defaultProps = {
-    keyToLink: (value) => `posts/${value}`,
+    keyToLink: (value) => `/posts/${value}`,
 };
 
 export default Hub;

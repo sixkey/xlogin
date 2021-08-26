@@ -7,6 +7,7 @@ import PostPage from "components/PostPage/PostPage";
 import useScript from "libs/scripts";
 import React, { Fragment } from "react";
 import {useRouteData} from "react-static";
+import {getStaticPath} from "../../libs/paths";
 
 //// INTERNAL ////
 
@@ -17,7 +18,7 @@ import "./Snippet.css";
 const SpoolCanvas = (props) => {
     const { snippetName } = props;
 
-    useScript(`snippets/${snippetName}/${snippetName}.min.js`);
+    useScript(getStaticPath(`snippets/${snippetName}/${snippetName}.min.js`));
 
     return (
         <div id="spool-root" style={{ width: "100%", overflow: "hidden" }}>

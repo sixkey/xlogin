@@ -1,11 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Tooltip } from "reactstrap";
-
 import { Container } from "reactstrap";
-
 import "./Portal.css";
-import { getStaticPath } from "libs/paths";
-import { getPostPath } from "libs/paths";
 import { getPathMixed } from "libs/paths";
 
 class Portal extends Component {

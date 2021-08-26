@@ -3,7 +3,6 @@
 //// EXTERNAL ////
 
 // React
-import { getStaticPath } from "libs/paths";
 import React, { Component, Fragment } from "react";
 
 //// INTERNAL ////
@@ -28,7 +27,7 @@ class GalleryItem extends Component {
                         className={`thumbnail ${
                             foreground ? "thumbnail-dark" : ""
                         }`}
-                        src={getStaticPath(src)}
+                        src={src}
                     ></img>
                     {foreground ? (
                         <Fragment>
@@ -37,7 +36,7 @@ class GalleryItem extends Component {
                             ) : (
                                 <img
                                     className={"card-logo " + imgClassName}
-                                    src={getStaticPath(logoSrc)}
+                                    src={logoSrc}
                                 ></img>
                             )}
                         </Fragment>

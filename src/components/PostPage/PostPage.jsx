@@ -23,7 +23,6 @@ import GalleryItem from "components/Gallery/GalleryItem";
 import { getStaticPath } from "libs/paths";
 
 import XLogo from "components/XLogo/XLogo";
-import { getPathMixed } from "libs/paths";
 import {useRouteData} from "react-static";
 
 ////// COMPONENT //////

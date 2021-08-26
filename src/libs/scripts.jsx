@@ -1,12 +1,11 @@
 import { useEffect } from "react";
-import { getStaticPath } from "./paths";
 
 const useScript = (url) => {
     useEffect(() => {
         if (typeof document !== 'undefined') {
             const script = document.createElement("script");
 
-            script.src = getStaticPath(url);
+            script.src = url;
             script.async = true;
 
             document.body.appendChild(script);

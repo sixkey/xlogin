@@ -1,5 +1,5 @@
-Trevo 2; trevo; [Java]; #trevo#java#sixgen#geneticalgorithm#2dgraphics; 09-01-2020
-# Introduction 5
+Trevo; trevo; [Java]; #trevo#java#sixgen#geneticalgorithm#2dgraphics; 09-01-2020
+# Introduction
 Trevo is an evolution simulation made in @@sixgen@@, that focuses on optimizing 2D tree-like structures for ideal energy input and output.
 #^ Development
 I started developing Trevo in the winter of 2016 and worked on it on and off for about two years. 

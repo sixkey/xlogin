@@ -75,10 +75,12 @@ class Gallery extends Component {
         if (itemFunction) {
             finalItem = itemFunction(item);
         }
-
+        console.log(finalItem)
         return (
             <GalleryItem
-                imgClassName={finalItem.imgClassName}
+                className={"m-0 p-0"}
+                logoClassName={finalItem.logoClassName}
+                imageClassName={finalItem.imageClassName}
                 src={finalItem.src}
                 logoSrc={finalItem.logoSrc}
                 link={finalItem.link}

@@ -1,7 +1,17 @@
 {
   "name": "react-static-example-blank",
   "private": true,
+  "watch": {
+    "buildposts": {
+        "patterns": ["content"], 
+        "extensions": "pst,json",
+        "ignore": "content/posts.json"
+    }
+  },
   "scripts": {
+    "watch": "npm-watch",
+    "buildposts": "cd content && python3 dotpstcompiler.py", 
+
     "start": "react-static start",
     "stage": "react-static build --staging",
     "build": "react-static build",
@@ -10,6 +20,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.1.0",
+    "npm-watch": "^0.11.0",
     "react": "^16.14.0",
     "react-animated-css": "^1.2.1",
     "react-copy-to-clipboard": "^5.0.4",
@@ -19,6 +30,7 @@
     "react-katex": "^2.0.2",
     "react-router-dom": "^5.2.0",
     "react-static": "^7.5.1",
+    "react-static-plugin-file-watch-reload": "^1.0.4",
     "react-static-plugin-reach-router": "^7.5.1",
     "react-static-plugin-sitemap": "^7.5.1",
     "react-static-plugin-source-filesystem": "^7.5.1",

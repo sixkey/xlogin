@@ -1,5 +1,10 @@
-.page-image {
-    width:100%;   
+.post-image {
+    max-width: 30vw;
+    margin: auto;
+}
+.post-image {
+    display: flex;
+    justify-items: center;
 }
 
 #scroll-follower {

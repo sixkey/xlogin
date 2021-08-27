@@ -65,6 +65,10 @@ def downloads(lines):
     data["items"] = lines
     return data
 
+def portal(lines):
+    data = {}
+    data["type"] = "post"
+    data["post"] = lines[0]
 
 def compile_buffer(buffer, buffer_type, alignment):
 
@@ -80,7 +84,8 @@ def compile_buffer(buffer, buffer_type, alignment):
         res = latex(buffer)
     elif(buffer_type == "downloads"):
         res = downloads(buffer)
-
+    elif(buffer_type == "portal"):
+        res = portal(buffer)
     if alignment:
         res["alignment"] = alignment
 
@@ -152,7 +157,7 @@ def workWithSubText(f, a, b, TIT=None, initialCall=False, collapse=False, show=F
     for i in range(a, b):
         l = f[i]
 
-        words = l.split(" ")
+        words = l.strip().split(" ")
 
         if(len(words) > 0):
             # Getting titles
@@ -210,7 +215,7 @@ def workWithSubText(f, a, b, TIT=None, initialCall=False, collapse=False, show=F
             alignment = ""
 
             for l in text:
-                words = l.split(' ')
+                words = l.strip().split(' ')
 
                 # Find portals
                 if(words[0] == "^^^"):
@@ -221,7 +226,7 @@ def workWithSubText(f, a, b, TIT=None, initialCall=False, collapse=False, show=F
                         buffer = []
 
                     # append this line as a portal
-                    buffer_type = ""
+                    buffer_type = "portal"
                     result.append(post(words[1]))
 
                 # Unordered list
@@ -320,49 +325,49 @@ def file_len(f):
 
 ###### Implementation ######
 
-files = os.listdir("posts")
+if __name__ == "__main__":
+    files = os.listdir("posts")
 
-result = {}
+    result = {}
 
-for f in files:
-    CURRENT_POST = f[:-4]
-    post_compiled = read_pst("posts/"+f)
+    for f in files:
+        CURRENT_POST = f[:-4]
+        post_compiled = read_pst("posts/"+f)
 
-    if(post_compiled != None):
-        result[post_compiled["key"]] = post_compiled["res"]
+        if(post_compiled != None):
+            result[post_compiled["key"]] = post_compiled["res"]
 
+    data = {"posts": {}}
 
-data = {"posts": {}}
+    for key in result:
+        data['posts'][key] = result[key]
 
-for key in result:
-    data['posts'][key] = result[key]
+    # Sections
+    sections = {}
+    keys = [key for key in data['posts']]
 
-# Sections
-sections = {}
-keys = [key for key in data['posts']]
+    with open('sections.json', 'r') as sections_file:
+        sections_json = json.load(sections_file)
 
-with open('sections.json', 'r') as sections_file:
-    sections_json = json.load(sections_file)
+        for section in sections_json['sections']:
+            empty = True
+            functioning_posts = []
+            for key in sections_json['sections'][section]['posts']:
+                if key in keys:
+                    keys.remove(key)
+                    data['posts'][key]['section'] = section
+                    functioning_posts.append(key)
+                    empty = False
+            if not empty:
+                sections[section] = sections_json['sections'][section]
+                sections[section]['posts'] = functioning_posts
+        if keys != []:
+            sections['misc'] = {
+                "title": "Misc.",
+                "posts": keys
+            }
 
-    for section in sections_json['sections']:
-        empty = True
-        functioning_posts = []
-        for key in sections_json['sections'][section]['posts']:
-            if key in keys:
-                keys.remove(key)
-                data['posts'][key]['section'] = section
-                functioning_posts.append(key)
-                empty = False
-        if not empty:
-            sections[section] = sections_json['sections'][section]
-            sections[section]['posts'] = functioning_posts
-    if keys != []:
-        sections['misc'] = {
-            "title": "Misc.",
-            "posts": keys
-        }
+    data['sections'] = sections
 
-data['sections'] = sections
-
-with open('posts.json', 'w') as outfile:
-    json.dump(data, outfile)
+    with open('posts.json', 'w') as outfile:
+        json.dump(data, outfile)

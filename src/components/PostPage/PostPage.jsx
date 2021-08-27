@@ -60,12 +60,14 @@ export default function PostPage(props) {
                             }}
                         ></XHub>
                         <hr />
-                        <GalleryItem
-                            imgClassName={"page-image"}
-                            src={postImage.src}
-                            logoSrc={postImage.logoSrc}
-                            imgClassName={postImage.imgClassName}
-                        ></GalleryItem>
+                        <div className="post-image-wrap">
+                            <GalleryItem
+                                src={postImage.src}
+                                logoSrc={postImage.logoSrc}
+                                logoClassName={postImage.logoClassName}
+                                className="post-image"
+                            ></GalleryItem>
+                        </div>
                         <hr />
                         <div className="break-word">
                             <HashtagList

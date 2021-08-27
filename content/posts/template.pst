@@ -1,0 +1,49 @@
+!!!Template Title; template; [template-lang1, template-lang2]; #hashtag1#hashtag2#hashtag3; 01-01-2001
+# Header1
+  ## Header2
+    ### Header3 
+      #### Header4 
+        hello
+#^ Header that can collapse and is collapsed
+  ##v Header that can collapse and is opened
+    hidden 
+# Ordered list
+  >1 ordered item 1
+  >1 ordered item 2 
+  >1 ordered item 3 
+  >1 ordered item 4 the number has to be >1
+  >1 cau
+# Unordered list 
+  >> bullet
+# Downloads 
+  Format: $VV$ <filepath>|<filename>
+  $VV$ images/clunk.png
+  $VV$ images/clunk.png|Clunk image
+# Latex 
+  ///
+    e = mc^2 
+  ///
+# Images 
+  Format: [alttext]|[path]|[desc]|[max width]
+  ::clunk|images/clunk.png|Clunk|300::
+# Link 
+  ## Other post 
+    @@clunk@@ 
+  ## Normal link 
+    @@page|https://fi.muni.cz/~xkucerak@@
+
+# Portal 
+  Following portal will add nhi
+  ^^^ nhi
+
+# Alignments
+([>
+right ([>
+([<
+left ([< 
+([>< 
+center ([><
+([<>
+reset ([<>
+([r 
+reset ([r

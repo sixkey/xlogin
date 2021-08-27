@@ -67,6 +67,7 @@ class ContentRendering extends Component {
                     <ContentRendering
                         level={this.props.level + 1}
                         content={content.content}
+                        posts={posts}
                     ></ContentRendering>
                 </Fragment>
             );
@@ -83,12 +84,13 @@ class ContentRendering extends Component {
 
 ////// COMPONENT RENDERING //////
 
-export function renderContainer(content, level) {
+export function renderContainer(content, level, posts) {
     return (
         <Container className="p-0">
             <ContentRendering
                 level={level + 1}
                 content={content.content}
+                posts={posts}
             ></ContentRendering>
         </Container>
     );

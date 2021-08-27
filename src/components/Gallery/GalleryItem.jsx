@@ -16,13 +16,13 @@ class GalleryItem extends Component {
     //// RENDERING ////
 
     render() {
-        const { src, logoSrc, link, imgClassName, titleElem } = this.props;
+        const { src, logoSrc, link, className, imageClassName, logoClassName, titleElem } = this.props;
 
         var foreground = titleElem || logoSrc;
 
         return (
             <a href={link}>
-                <div className="gallery-item m-0 p-0">
+                <div className={`gallery-item ${className}`}>
                     <img
                         className={`thumbnail ${
                             foreground ? "thumbnail-dark" : ""
@@ -32,10 +32,10 @@ class GalleryItem extends Component {
                     {foreground ? (
                         <Fragment>
                             {titleElem ? (
-                                <div className="abs-full">{titleElem}</div>
+                                <div className={"abs-full " + imageClassName}>{titleElem}</div>
                             ) : (
                                 <img
-                                    className={"card-logo " + imgClassName}
+                                    className={"card-logo " + logoClassName}
                                     src={logoSrc}
                                 ></img>
                             )}

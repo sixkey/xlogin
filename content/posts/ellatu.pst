@@ -1,0 +1,27 @@
+Ellatu; ellatu; [python]; #python#discord#tatsu#grammar#mongo; 08-27-2001
+# Introduction
+  Ellatu is a library for creating team based games based on collaboration and text submissions. Elatu is also on @@github|https://github.com/sixkey/ellatu@@ and @@pypi|https://pypi.org/project/ellatu/@@. The documentation is currently not present, maybe in the future. 
+  Ellatu primarily focuses on the back-end, but contains a discord-bot front-end. 
+# Ellatu 
+  ## World 
+    World is a set of connected (each level has a set of prerequisites) levels connected by a theme, testing pipeline or a language. 
+  ## Level 
+    Each level apart from metadata such as title, description, hashtags, prerequisites, etc. contains tests and workflow-id. Workflow-id defines how is the level tested, tests define the test data. For example lists of inputs and outputs. 
+  ## Submit 
+    Ellatu was created with the intention of supporting team based games, meaning we had to separate the act of submitting and running as each team-member has to submit on his own before one can finally run the tests. Each user can submit his set of "text fragments". This can be used to limit the number of lines in functions, for example you can limit each user to submit at most three fragments each containing no more than ten lines. 
+  ## Run 
+    Once all the answers are submitted, one user can run the answer either alone or with other users by tagging them. 
+# Mapper 
+  Ellatu currently contains one world (level set), "mapper". Mapper is a very simple python-like language (severely stripped down). The main idea is moving a ship on a 2d colored grid. Your task is to draw a map (an image) that satisfies the level's descpription or to replicate a map given by the level. 
+  The levels are simple from the start, but get harder as you move one, mainly because there are no composite data structures (no lists, tuples, sets, etc.) so you have to be creative.
+  The following level is a start of a medium difficulty level branch revolving around space invaders. In the first level of this branch, we are drawing only a one character that will in later levels populate a whole scene (you will have to see that for yourself). 
+  ::spcinv|images/spcinv1-0-start.png|Space invader level|300::
+  The following level is one in which you are supossed to recolor black path blue, and represent levels that are task driven and contain more tests.
+  ::follow|images/follow-0-start.png|Line following level|300::
+  ## Grammar
+    The grammar for mapper language is defined in @@EBNF|https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form@@ and the parser is generated using @@Tatsu|https://github.com/neogeny/TatSu@@.
+  ## Runtime 
+    Runtime is achieved via tatsu walker and is done in python. As the code for mapper is usually no more than 80 lines long and does not contain any complex logic this is relatively fine.
+# Discord Bot 
+  Discord bot is currently under development, I shall add link for it once it is at least in a beta stage.
+  I must admit, that the discord interface is a little clumsy as it is basically a terminal. Meaning creation of a usable editor is almost impossible. That being said, it is a matter of an opinion and you should try it for yourself (once the bot is done). 

@@ -7,7 +7,6 @@
 
 import path from 'path'
 import { owner, title, desc, basePath, devBasePath } from './xlogconf.json'
-import { posts, sections } from './content/posts.json'
 import { icons, absent } from './content/icons.json'
 import React from 'react'
 import {isSnippetKey, galleryItemFunction} from './src/libs/paths'
@@ -22,52 +21,54 @@ export default {
         desc: desc
     }), 
     getRoutes: async () => {
+        var fs = require('fs')
+        let { icons, absent } = JSON.parse(fs.readFileSync('./content/icons.json', 'utf8'))
+        let { posts, sections } = JSON.parse(fs.readFileSync('./content/posts.json', 'utf8'))
+        const galleryItemFunctionInstance = galleryItemFunction(icons, absent, posts)
+        const postsLight = {}
+            Object.keys(posts).forEach(key => {
+                var post = Object.assign({}, posts[key]) 
+                delete post['content']
+                postsLight[key] = post
+            })
+        
+        const children = [
+            ...Object.keys(posts).map(key => {
+                const renderer = isSnippetKey(key) ? 'snippet' : 'post' 
+                return({
+                  path: `/${renderer}/${key}`,
+                  template: `src/containers/${renderer}`,
+                  getData: () => ({
+                      posts: posts,
+                      post: posts[key],
+                      postid: key,
+                      sections: sections, 
+                      postImage: galleryItemFunctionInstance(key)
+                  }),
+                })
+            }),
+            {
+                path: '/', 
+                template: `src/pages/index`, 
+                getData: () => ({
+                      posts: postsLight,
+                      sections: sections, 
+                      icons: icons, 
+                      absent: absent
+                })
+            }, 
+            {
+                path: '404',
+                template: 'src/pages/404', 
+                getData: () => ({
+                    posts: postsLight, 
+                    sections: sections
+                })
+            }
 
-    const galleryItemFunctionInstance = galleryItemFunction(icons, absent, posts)
-    const postsLight = {}
-        Object.keys(posts).forEach(key => {
-            var post = Object.assign({}, posts[key]) 
-            delete post['content']
-            postsLight[key] = post
-        })
-    
-    const children = [
-        ...Object.keys(posts).map(key => {
-            const renderer = isSnippetKey(key) ? 'snippet' : 'post' 
-            return({
-              path: `/${renderer}/${key}`,
-              template: `src/containers/${renderer}`,
-              getData: () => ({
-                  posts: posts,
-                  post: posts[key],
-                  postid: key,
-                  sections: sections, 
-                  postImage: galleryItemFunctionInstance(key)
-              }),
-            })
-        }),
-        {
-            path: '/', 
-            template: `src/pages/index`, 
-            getData: () => ({
-                  posts: postsLight,
-                  sections: sections, 
-                  icons: icons, 
-                  absent: absent
-            })
-        }, 
-        {
-            path: '404',
-            template: 'src/pages/404', 
-            getData: () => ({
-                posts: postsLight, 
-                sections: sections
-            })
-        }
-
-    ]
-    return children
-  },
+        ]
+        return children
+      },
   plugins: [
     [
         require.resolve('react-static-plugin-source-filesystem'),
@@ -77,6 +78,13 @@ export default {
     ],
     require.resolve('react-static-plugin-reach-router'),
     require.resolve('react-static-plugin-sitemap'),
+    [
+      'react-static-plugin-file-watch-reload',
+      {
+        // example configuration
+        paths: ['content/posts.json', 'xlogconf.json', 'content/icons.json'],
+      },
+    ],
   ],
   Document: ({Html, Head, Body, children, state, renderMeta}) => {
         

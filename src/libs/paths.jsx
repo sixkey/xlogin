@@ -33,7 +33,7 @@ export const galleryItemFunction = (icons, absent, posts) => {
                 src: getStaticPath(`images/${item}.png`),
                 logoSrc: null,
                 link: getPathMixed(item),
-                imgClassName: icons[item] ? icons[item] : "",
+                logoClassName: icons[item] ? icons[item] : "",
                 titleElem: <h3 className="absent-title">{posts[item].title}</h3>,
             };
         } else {
@@ -41,7 +41,7 @@ export const galleryItemFunction = (icons, absent, posts) => {
                 src: getStaticPath(`images/${item}.png`),
                 logoSrc: getStaticPath(`images/${item}-logo.png`),
                 link: getPathMixed(item),
-                imgClassName: icons[item] ? icons[item] : "",
+                logoClassName: icons[item] ? icons[item] : "",
             };
         }
     }

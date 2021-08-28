@@ -4,6 +4,5 @@
         "lebac": "card-logo-w7 pixelated",
         "axiol": "card-logo-h7", 
         "ellatu": "card-logo-h6"
-    },
-    "absent": ["snip-astar", "snip-cars", "snip-boids", "snip-hunters", "snip-hunters2", "snip-particles"]
+    }
 }

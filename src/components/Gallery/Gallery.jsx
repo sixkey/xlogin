@@ -19,12 +19,8 @@ class Gallery extends Component {
     //// RENDERING ////
 
     render() {
-        const { items, columns } = this.props;
-
-        var columnsNumbers = { lg: 4, md: 3, sm: 2, xs: 2 };
-
-        var columnCount = 4;
-
+        const { items, columnsNumbers = { lg: 4, md: 3, sm: 2, xs: 2 } } = this.props;
+        var columnCount = 12;
         var galleryItems = items.map((item, index) => (
             <Col
                 key={index}
@@ -75,7 +71,11 @@ class Gallery extends Component {
         if (itemFunction) {
             finalItem = itemFunction(item);
         }
-        console.log(finalItem)
+
+        if (!finalItem) {
+            return null;
+        }
+
         return (
             <GalleryItem
                 className={"m-0 p-0"}

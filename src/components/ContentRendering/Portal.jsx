@@ -61,7 +61,7 @@ class Portal extends Component {
                                 {text}
                                 <span className="p">{rightBracket}</span>
                             </span>
-                            <span className="p">{title}</span>
+                            <span className="p text-black">{title}</span>
                         </a>
                     </span>
                 </Fragment>

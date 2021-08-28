@@ -18,28 +18,34 @@ import {galleryItemFunction} from "../../libs/paths";
 
 ////// COMPONENT //////
 
+const COLUMN_NUMBERS = { lg: 4, md: 3, sm: 2, xs: 2 }
 
-function createPostsSearch(icons, absent) {
+function createPostsSearch(icons) {
     return (posts, sections, postKeys, extended, lg) => {
         return (
             <Gallery
+                columnsNumbers={COLUMN_NUMBERS}
                 items={postKeys}
-                itemFunction={galleryItemFunction(icons, absent, posts)}
+                itemFunction={galleryItemFunction(icons, posts)}
             ></Gallery>
         );
     }
 }
 
-function createPostsSection(icons, absent) { 
+function createPostsSection(icons) { 
     return (posts, sections, postKeys, extended, lg) => {
+        const keys = sections.sectionsOrder 
+            ? sections.sectionsOrder 
+            : Object.keys(sections.sections)
         return (
             <Fragment>
-                {Object.keys(sections).map((key, index) => (
+                {keys.map((key, index) => (
                     <div className="my-2" key={index}>
-                        <h3 className="py-2">{sections[key].title}</h3>
+                        <h3 className="py-2">{sections.sections[key].title}</h3>
                         <Gallery
-                            items={sections[key].posts}
-                            itemFunction={galleryItemFunction(icons, absent, posts)}
+                            columnsNumbers={COLUMN_NUMBERS}
+                            items={sections.sections[key].posts}
+                            itemFunction={galleryItemFunction(icons, posts)}
                         ></Gallery>
                     </div>
                 ))}
@@ -48,19 +54,19 @@ function createPostsSection(icons, absent) {
     }
 }
 function ProjectLibrary (props) {
-    let {posts, sections, icons, absent} = useRouteData();
+    let {projectPosts, sections, icons } = useRouteData();
     return (
         <Container>
             <XHub
-                posts={posts}
-                sections={sections}
+                posts={projectPosts}
+                sections={sections.projects}
                 extended={true}
                 renderTitle={() => {
-                    return <h2>Projects</h2>;
+                    return <h2>{sections.projects.title}</h2>;
                 }}
                 searchTerm={props.searchTerm}
-                renderPostsSearch={createPostsSearch(icons, absent, posts)}
-                renderPostsSection={createPostsSection(icons, absent, posts)}
+                renderPostsSearch={createPostsSearch(icons, projectPosts)}
+                renderPostsSection={createPostsSection(icons, projectPosts)}
             ></XHub>
         </Container>
     );

@@ -3,6 +3,7 @@ from pprint import pprint
 
 import os
 import sys
+from typing import Any, Dict, List, Set
 
 
 ###### TEMP VARIABLES ######
@@ -92,7 +93,6 @@ def compile_buffer(buffer, buffer_type, alignment):
     return res
 
 ###### File compiling ######
-
 
 def read_pst(path):
     with open(path, 'r', encoding="utf-8") as f:
@@ -325,49 +325,91 @@ def file_len(f):
 
 ###### Implementation ######
 
+JSON = Dict['str', Any]
+
+def load_section(key: str, section: JSON, data: JSON, posts: Set[str]):
+    if 'sections' in section:
+        for key, child_section in section['sections'].items():
+            load_section(key, child_section, data, posts)
+    if 'posts' in section:
+        real_posts = []
+        for post_key in section['posts']:
+            if post_key in posts:
+                posts.remove(post_key)
+                data['posts'][post_key]['section'] = key
+                if 'postAttr' in section:
+                    for attr, value in section['postAttr'].items():
+                        data['posts'][post_key][attr] = value
+                real_posts.append(post_key)
+            else:
+                print('post {} not present'.format(post_key))
+        section['posts'] = real_posts
+
+
+def embed_section(parent: JSON, section: JSON, keys: List[str]) -> None:
+    post_attr = {}
+    if not keys:
+        return
+    for index in range(len(keys)):
+        key = keys[index]
+        if 'sections' not in parent:
+            parent['sections'] = {}
+        if 'postAttr' in parent:
+            post_attr.update(parent['postAttr'])
+        if index == len(keys) - 1:
+            parent['sections'][keys[-1]] = section
+            if 'postAttr' in section:
+                post_attr.update(section['postAttr'])
+            if post_attr:
+                parent['sections'][keys[-1]]['postAttr'] = post_attr
+        else:
+            if key not in parent['sections']:
+                parent['sections'][key] = {}
+            parent = parent['sections'][key]
+
+def key_to_title(key: str) -> str:
+    return key[0].upper() + key[1:].replace('_', ' ')
+
 if __name__ == "__main__":
-    files = os.listdir("posts")
 
     result = {}
 
-    for f in files:
-        CURRENT_POST = f[:-4]
-        post_compiled = read_pst("posts/"+f)
+    root_dir = 'posts'
 
-        if(post_compiled != None):
-            result[post_compiled["key"]] = post_compiled["res"]
+    sections = {}
+
+    for dir_name, subdirs, file_list in os.walk(root_dir):
+        keys = dir_name.split('/')[1:]
+        if not keys:
+            continue
+        section = {}
+        posts = []
+        config_path = os.path.join(dir_name, 'section.json')
+
+        if os.path.isfile(os.path.join(dir_name, 'section.json')):
+            with open(config_path, 'r') as f:
+                section_config = json.load(f)
+                section = {**section_config}
+
+        for file in filter(lambda x: os.path.splitext(x)[1]=='.pst',sorted(file_list)):
+            post_compiled = read_pst(os.path.join(dir_name, file))
+            if (post_compiled != None):
+                result[post_compiled["key"]] = post_compiled["res"]
+                posts.append(post_compiled['key'])
+        if posts:
+            section['posts'] = posts
+        if 'title' not in section:
+            section['title'] = key_to_title(keys[-1])
+        embed_section(sections, section, keys)
+
+    pprint(sections)
 
     data = {"posts": {}}
-
     for key in result:
         data['posts'][key] = result[key]
-
-    # Sections
-    sections = {}
     keys = [key for key in data['posts']]
-
-    with open('sections.json', 'r') as sections_file:
-        sections_json = json.load(sections_file)
-
-        for section in sections_json['sections']:
-            empty = True
-            functioning_posts = []
-            for key in sections_json['sections'][section]['posts']:
-                if key in keys:
-                    keys.remove(key)
-                    data['posts'][key]['section'] = section
-                    functioning_posts.append(key)
-                    empty = False
-            if not empty:
-                sections[section] = sections_json['sections'][section]
-                sections[section]['posts'] = functioning_posts
-        if keys != []:
-            sections['misc'] = {
-                "title": "Misc.",
-                "posts": keys
-            }
-
-    data['sections'] = sections
+    load_section('', sections, data, set(keys))
+    data['sections'] = sections['sections']
 
     with open('posts.json', 'w') as outfile:
         json.dump(data, outfile)

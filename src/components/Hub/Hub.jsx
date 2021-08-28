@@ -26,6 +26,7 @@ class Hub extends Component {
 
         this.renderPostsSection = this.renderPostsSection.bind(this);
         this.renderPostsSearch = this.renderPostsSearch.bind(this);
+        this.hubid = Math.random()
     }
 
     componentDidMount() {
@@ -51,6 +52,10 @@ class Hub extends Component {
         return s.toLowerCase().replace(/[^a-z]/g, "");
     }
 
+    getSearchId() {
+        return `search-${this.hubid}`
+    }
+
     refreshPosts(searchTerm = null, hardAccept = false) {
         let { hashtags } = this.state;
         let { posts } = this.props;
@@ -59,17 +64,17 @@ class Hub extends Component {
             searchTerm = this.state.searchTerm;
         }
 
-        var postKeys = [];
+        var postKeys = Object.keys(posts);
         var sectionView = true;
+        var seachId = this.getSearchId();
 
         if (
             !hardAccept &&
             (!searchTerm ||
-                (typeof document !== 'undefinde' && document.getElementById("search")
-                    ? document.getElementById("search").value.length < 1
+                (typeof document !== 'undefinde' && document.getElementById(seachId)
+                    ? document.getElementById(seachId).value.length < 1
                     : searchTerm.length < 1))
         ) {
-            postKeys = Object.keys(posts);
             postKeys = postKeys
                 .sort((a, b) => {
                     return b.localeCompare(a);
@@ -78,9 +83,6 @@ class Hub extends Component {
         } else {
             sectionView = false;
             searchTerm = this.toOnlyLower(searchTerm);
-
-            postKeys = Object.keys(posts);
-
             postKeys = postKeys.map((key) => {
                 var changedTitle = this.toOnlyLower(posts[key].title);
                 if (changedTitle.includes(searchTerm)) {
@@ -90,14 +92,19 @@ class Hub extends Component {
                     };
                 }
                 // Check the section
-                if (posts[key].section.match())
-                    if (key.includes(searchTerm)) {
-                        // Check the key
-                        return {
-                            key: key,
-                            priority: 1,
-                        };
-                    }
+                if (posts[key].section.includes(searchTerm)) {
+                    return {
+                        key: key,
+                        priority: 2,
+                    };
+                }
+                if (key.includes(searchTerm)) {
+                    // Check the key
+                    return {
+                        key: key,
+                        priority: 1,
+                    };
+                }
                 // Check the hashtags
                 if (posts[key].hashtags) {
                     for (var j = 0; j < posts[key].hashtags.length; j++) {
@@ -124,15 +131,13 @@ class Hub extends Component {
                 return;
             });
 
-            postKeys = postKeys.filter((a) => {
-                return a ? true : false;
-            });
+            postKeys = postKeys.filter((a) => Boolean(a));
 
             postKeys = postKeys
                 .sort((a, b) => {
                     if (a.priority < b.priority) return -1;
                     if (a.priority > b.priority) return 1;
-                    if (a.priority === b.priority) return b.localeCompare(a);
+                    if (a.priority === b.priority) return b.key.localeCompare(a.key);
                 })
                 .map((value) => value.key);
         }
@@ -151,6 +156,7 @@ class Hub extends Component {
             : <Fragment>{children}</Fragment>)
         return (
             <Fragment>
+                <div className={extended ? 'hub-extended-list' : ''}> 
                 {postKeys.map((value, index) => (
                     <Fragment key={index}>
                         {wrapper(
@@ -164,15 +170,19 @@ class Hub extends Component {
                         )}
                     </Fragment>
                 ))}
+                </div>
             </Fragment>
         );
     }
 
     renderPostsSection(posts, sections, postKeys, extended, lg) {
         const { keyToLink } = this.props;
+        const keys = sections.sectionsOrder 
+            ? sections.sectionsOrder 
+            : Object.keys(sections.sections)
         return (
             <Fragment>
-                {Object.keys(sections).map((key, index) => (
+                {keys.map((key, index) => (
                     <Animated
                         animationIn="fadeUp"
                         animationOut="fadeDown"
@@ -181,17 +191,19 @@ class Hub extends Component {
                         key={index}
                     >
                         <div className="py-3">
-                            <h3>{sections[key].title}</h3>
-                            {sections[key].posts.map((postKey) => (
-                                <div className="py-1">
-                                    <Portal
-                                        text={key}
-                                        title={posts[key].title}
-                                        link={keyToLink(key)}
-                                        extended={extended}
-                                    ></Portal>
-                                </div>
-                            ))}
+                            <h3>{sections.sections[key].title}</h3>
+                            <div className={extended ? 'hub-extended-list' : ''}> 
+                                {sections.sections[key].posts.map((postKey, index) => (
+                                    <div className="py-1" key={index}>
+                                        <Portal
+                                            text={postKey}
+                                            title={posts[postKey].title}
+                                            link={keyToLink(postKey)}
+                                            extended={extended}
+                                        ></Portal>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </Animated>
                 ))}
@@ -239,7 +251,7 @@ class Hub extends Component {
                                     autoComplete="off"
                                     type="text"
                                     name="search"
-                                    id="search"
+                                    id={this.getSearchId()}
                                     placeholder="search"
                                     onChange={this.onChange}
                                     value={this.state.searchTerm}

@@ -7,10 +7,17 @@
 
 import path from 'path'
 import { owner, title, desc, basePath, devBasePath } from './xlogconf.json'
-import { icons, absent } from './content/icons.json'
+import { icons } from './content/icons.json'
 import React from 'react'
 import {isSnippetKey, galleryItemFunction} from './src/libs/paths'
 
+function filterPosts(sections, posts) {
+    const res = {}
+    Object.keys(sections).map((section, index) => {
+        for(let value of sections[section]['posts']) res[value] = posts[value]; 
+    })
+    return res;
+}
 
 export default {
     basePath: basePath,
@@ -22,21 +29,26 @@ export default {
     }), 
     getRoutes: async () => {
         var fs = require('fs')
-        let { icons, absent } = JSON.parse(fs.readFileSync('./content/icons.json', 'utf8'))
+        let { icons } = JSON.parse(fs.readFileSync('./content/icons.json', 'utf8'))
         let { posts, sections } = JSON.parse(fs.readFileSync('./content/posts.json', 'utf8'))
-        const galleryItemFunctionInstance = galleryItemFunction(icons, absent, posts)
+        const galleryItemFunctionInstance = galleryItemFunction(icons, posts)
+        
         const postsLight = {}
-            Object.keys(posts).forEach(key => {
-                var post = Object.assign({}, posts[key]) 
-                delete post['content']
-                postsLight[key] = post
-            })
+        
+        Object.keys(posts).forEach(key => {
+            var post = Object.assign({}, posts[key]) 
+            delete post['content']
+            postsLight[key] = post
+        })
+        
+        const projectPosts = filterPosts(sections.projects.sections, posts) 
+        const blogPosts = filterPosts(sections.blog.sections, posts) 
         
         const children = [
             ...Object.keys(posts).map(key => {
                 const renderer = isSnippetKey(key) ? 'snippet' : 'post' 
                 return({
-                  path: `/${renderer}/${key}`,
+                  path: `/post/${key}`,
                   template: `src/containers/${renderer}`,
                   getData: () => ({
                       posts: posts,
@@ -52,9 +64,10 @@ export default {
                 template: `src/pages/index`, 
                 getData: () => ({
                       posts: postsLight,
-                      sections: sections, 
-                      icons: icons, 
-                      absent: absent
+                      blogPosts, 
+                      projectPosts, 
+                      sections, 
+                      icons
                 })
             }, 
             {

@@ -19,16 +19,20 @@ export const getPostPath = (item) => {
 };
 
 export const getSnipPath = (item) => {
-    return getStaticPath(`snippet/${item}`)
+    return getStaticPath(`post/${item}`)
 };
 
 export const getHashtagPath = (item) => {
     return getStaticPath(`?hashtag=${item}`);
 };
 
-export const galleryItemFunction = (icons, absent, posts) => {
+export const galleryItemFunction = (icons, posts) => {
     return (item) => {
-        if (absent.includes(item)) {
+        const post = posts[item]
+        if ('thumbnail' in post && post.thumbnail == 'none') {
+            return null; 
+        }
+        if ('thumbnailLogo' in post && post.thumbnailLogo == 'none') {
             return {
                 src: getStaticPath(`images/${item}.png`),
                 logoSrc: null,
@@ -36,14 +40,13 @@ export const galleryItemFunction = (icons, absent, posts) => {
                 logoClassName: icons[item] ? icons[item] : "",
                 titleElem: <h3 className="absent-title">{posts[item].title}</h3>,
             };
-        } else {
-            return {
-                src: getStaticPath(`images/${item}.png`),
-                logoSrc: getStaticPath(`images/${item}-logo.png`),
-                link: getPathMixed(item),
-                logoClassName: icons[item] ? icons[item] : "",
-            };
         }
+        return {
+            src: getStaticPath(`images/${item}.png`),
+            logoSrc: getStaticPath(`images/${item}-logo.png`),
+            link: getPathMixed(item),
+            logoClassName: icons[item] ? icons[item] : "",
+        };
     }
 };
 

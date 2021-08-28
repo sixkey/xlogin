@@ -3,16 +3,17 @@
   "private": true,
   "watch": {
     "buildposts": {
-        "patterns": ["content"], 
-        "extensions": "pst,json",
-        "ignore": "content/posts.json"
+      "patterns": [
+        "content"
+      ],
+      "extensions": "pst,json",
+      "ignore": "content/posts.json"
     }
   },
   "scripts": {
     "watch": "npm-watch",
-    "buildposts": "cd content && python3 dotpstcompiler.py", 
-
-    "start": "react-static start",
+    "buildposts": "cd content && python3 dotpstcompiler.py",
+    "start": "concurrently \"react-static start\" \"npm run watch\"",
     "stage": "react-static build --staging",
     "build": "react-static build",
     "analyze": "react-static build --analyze",
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.1.0",
+    "concurrently": "^6.2.1",
     "npm-watch": "^0.11.0",
     "react": "^16.14.0",
     "react-animated-css": "^1.2.1",

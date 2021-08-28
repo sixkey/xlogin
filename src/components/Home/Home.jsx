@@ -16,6 +16,7 @@ import { Animated } from "react-animated-css";
 
 import "./Home.css";
 import ColumnAnimator from "components/ColumnAnimator/ColumnAnimator";
+import Blog from "../Blog/Blog";
 
 
 ////// COMPONENT //////
@@ -92,6 +93,10 @@ class Home extends Component {
                         <ProjectLibrary
                             searchTerm={hashtag}
                         ></ProjectLibrary>
+                        <a name="blog"></a> 
+                        <Blog
+                            searchTerm={hashtag}
+                        ></Blog>
                     </div>
                     <div className="home-section">
                         <a name="contacts"></a>

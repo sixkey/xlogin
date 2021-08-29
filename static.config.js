@@ -31,7 +31,6 @@ export default {
         var fs = require('fs')
         let { icons } = JSON.parse(fs.readFileSync('./content/icons.json', 'utf8'))
         let { posts, sections } = JSON.parse(fs.readFileSync('./content/posts.json', 'utf8'))
-        const galleryItemFunctionInstance = galleryItemFunction(icons, posts)
         
         const postsLight = {}
         
@@ -41,8 +40,8 @@ export default {
             postsLight[key] = post
         })
         
-        const projectPosts = filterPosts(sections.projects.sections, posts) 
-        const blogPosts = filterPosts(sections.blog.sections, posts) 
+        const projectPosts = filterPosts(sections.projects.sections, postsLight) 
+        const blogPosts = filterPosts(sections.blog.sections, postsLight) 
         
         const children = [
             ...Object.keys(posts).map(key => {
@@ -51,11 +50,11 @@ export default {
                   path: `/post/${key}`,
                   template: `src/containers/${renderer}`,
                   getData: () => ({
+                      icons: icons,
                       posts: posts,
                       post: posts[key],
                       postid: key,
                       sections: sections, 
-                      postImage: galleryItemFunctionInstance(key)
                   }),
                 })
             }),
@@ -63,13 +62,12 @@ export default {
                 path: '/', 
                 template: `src/pages/index`, 
                 getData: () => ({
-                      posts: postsLight,
                       blogPosts, 
                       projectPosts, 
                       sections, 
                       icons
                 })
-            }, 
+            },  
             {
                 path: '404',
                 template: 'src/pages/404', 
@@ -102,11 +100,7 @@ export default {
   Document: ({Html, Head, Body, children, state, renderMeta}) => {
         
       let { desc, title } = state.siteData;
-
-
       var publicUrl = process.env.NODE_ENV === 'development' ? devBasePath : basePath; 
-
-      console.log(publicUrl)
       return (
     <Html>
         <Head>

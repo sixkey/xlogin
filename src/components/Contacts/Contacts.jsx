@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {useSiteData} from 'react-static';
+import {Alert} from 'reactstrap';
 
 const ContWrapper = (props) => {
     return props.link 
@@ -19,7 +20,10 @@ const Cont = (props) => {
     )
 }
 
-const Contacts = (props) => {
+export default function Contacts(props) {
+
+    const [alertVisible, setAlertVisible] = useState(false); 
+    const [alertMessage, setAlertMessage] = useState(null); 
 
     var { github = null, email = null } = props;
     
@@ -32,6 +36,10 @@ const Contacts = (props) => {
 
     return (
         <Fragment>
+
+            <Alert color='primary' isOpen={alertVisible && alertMessage}> 
+                {alertMessage}
+            </Alert> 
             <h2>Contacts</h2>
             <div className="contacts">
                 { github ? 
@@ -45,14 +53,10 @@ const Contacts = (props) => {
                 <CopyToClipboard
                     text={email}
                     onCopy={() => {
-                        this.setState({
-                            alert: "email copied",
-                            alertVisible: true,
-                        });
+                        setAlertMessage('email copied')
+                        setAlertVisible(true)
                         setTimeout(() => {
-                            this.setState({
-                                alertVisible: false,
-                            });
+                            setAlertVisible(false)
                         }, 3000);
                     }}>
                     <Cont icon='fas fa-at'>{email}</Cont>
@@ -63,5 +67,3 @@ const Contacts = (props) => {
         </Fragment>
     )
 }
-
-export default Contacts;

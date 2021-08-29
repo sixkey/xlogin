@@ -3,7 +3,7 @@
 //// EXTERNAL ////
 
 // React
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 // Reactstrap
 import { Container, Row, Col } from "reactstrap";
@@ -24,12 +24,14 @@ import { getStaticPath } from "libs/paths";
 
 import XLogo from "components/XLogo/XLogo";
 import {useRouteData} from "react-static";
+import {galleryItemFunction} from "../../libs/paths";
 
 ////// COMPONENT //////
 
 export default function PostPage(props) {
     let { lg } = getBootstrapSizeTags();
-    let { posts, post, sections, postImage, postid } = useRouteData();
+    let { posts, post, icons, sections, postid } = useRouteData();
+    const postImage = galleryItemFunction(icons, posts)(postid)
     return (
         <Container className="projects-container py-5">
             <Animated
@@ -64,9 +66,12 @@ export default function PostPage(props) {
                                 <hr />
                                 <div className="post-image-wrap">
                                     <GalleryItem
+                                        logoClassName={postImage.logoClassName}
+                                        imageClassName={postImage.imageClassName}
                                         src={postImage.src}
                                         logoSrc={postImage.logoSrc}
-                                        logoClassName={postImage.logoClassName}
+                                        link={postImage.link}
+                                        titleElem={postImage.titleElem}
                                         className="post-image"
                                     ></GalleryItem>
                                 </div> 

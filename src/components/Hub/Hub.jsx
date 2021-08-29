@@ -9,6 +9,24 @@ import { Animated } from "react-animated-css";
 import "./Hub.css";
 import Portal from "components/ContentRendering/Portal";
 
+function HubDefaultListWrapper(props) {
+    let {extended, children} = props;
+    if (extended) {
+        return (<div className="py-3 hub-extended-list">{children}</div>)
+    } else {
+        return (<Fragment>{children}</Fragment>)
+    }
+}
+
+function HubDefaultItemWrapper(props) {
+    let {extended, children} = props; 
+    if (extended) {
+        return (<div className="py-1">{children}</div>)
+    } else {
+        return (<Fragment>{children}</Fragment>)
+    }
+}
+
 class Hub extends Component {
     constructor(props) {
         super(props);
@@ -77,9 +95,8 @@ class Hub extends Component {
         ) {
             postKeys = postKeys
                 .sort((a, b) => {
-                    return b.localeCompare(a);
+                    return a.localeCompare(b);
                 })
-                .reverse();
         } else {
             sectionView = false;
             searchTerm = this.toOnlyLower(searchTerm);
@@ -130,14 +147,12 @@ class Hub extends Component {
 
                 return;
             });
-
-            postKeys = postKeys.filter((a) => Boolean(a));
-
             postKeys = postKeys
+                .filter((a) => Boolean(a))
                 .sort((a, b) => {
                     if (a.priority < b.priority) return -1;
                     if (a.priority > b.priority) return 1;
-                    if (a.priority === b.priority) return b.key.localeCompare(a.key);
+                    if (a.priority === b.priority) return a.key.localeCompare(b.key);
                 })
                 .map((value) => value.key);
         }
@@ -149,29 +164,23 @@ class Hub extends Component {
         return <h3>Home</h3>;
     };
 
+
     renderPostsSearch(posts, sections, postKeys, extended, lg) {
         const { keyToLink } = this.props;
-        const wrapper = (children) => (extended
-            ? <div className="py-1">{children}</div> 
-            : <Fragment>{children}</Fragment>)
         return (
-            <Fragment>
-                <div className={extended ? 'hub-extended-list' : ''}> 
+            <HubDefaultListWrapper extended={extended}>
                 {postKeys.map((value, index) => (
-                    <Fragment key={index}>
-                        {wrapper(
-                                <Portal
-                                    text={value}
-                                    title={posts[value].title}
-                                    link={keyToLink(value)}
-                                    extended={extended}
-                                    nowrap={true}
-                                ></Portal>
-                        )}
-                    </Fragment>
+                    <HubDefaultItemWrapper extended={extended} key={index}>
+                         <Portal
+                             text={value}
+                             title={posts[value].title}
+                             link={keyToLink(value)}
+                             extended={extended}
+                             nowrap={true}
+                         ></Portal>
+                    </HubDefaultItemWrapper>
                 ))}
-                </div>
-            </Fragment>
+            </HubDefaultListWrapper>
         );
     }
 
@@ -190,21 +199,23 @@ class Hub extends Component {
                         animationInDelay={index * 1000}
                         key={index}
                     >
-                        <div className="py-3">
-                            <h3>{sections.sections[key].title}</h3>
-                            <div className={extended ? 'hub-extended-list' : ''}> 
-                                {sections.sections[key].posts.map((postKey, index) => (
-                                    <div className="py-1" key={index}>
-                                        <Portal
-                                            text={postKey}
-                                            title={posts[postKey].title}
-                                            link={keyToLink(postKey)}
-                                            extended={extended}
-                                        ></Portal>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        { sections.sections[key].title != '' 
+                            ? <h3>{sections.sections[key].title}</h3> 
+                            : null 
+                        } 
+                        <HubDefaultListWrapper extended={extended}>
+                            {sections.sections[key].posts.map((postKey, index) => (
+                                <HubDefaultItemWrapper extended={extended} key={index}>
+                                    <Portal
+                                         text={postKey}
+                                         title={posts[postKey].title}
+                                         link={keyToLink(postKey)}
+                                         extended={extended}
+                                         nowrap={true}
+                                    ></Portal>
+                                </HubDefaultItemWrapper>
+                            ))}
+                        </HubDefaultListWrapper>
                     </Animated>
                 ))}
             </Fragment>

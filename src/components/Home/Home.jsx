@@ -16,8 +16,6 @@ import { Animated } from "react-animated-css";
 
 import "./Home.css";
 import ColumnAnimator from "components/ColumnAnimator/ColumnAnimator";
-import Blog from "../Blog/Blog";
-
 
 ////// COMPONENT //////
 
@@ -63,47 +61,55 @@ class Home extends Component {
         }
 
         return (
-            <Container className="home">
+            <Fragment>
+
                 <Animated
                     animationInDuration={300}
                     animationOutDuration={300}
                     isVisible={goUpVisible}
+                    className="go-to-top-animation"
                 >
-                    <div className="go-to-top">
-                        <a href="#header">
+                    <a href="#header">
+                        <div className="go-to-top">
                             <i className="fas fa-chevron-up"></i>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </Animated>
-                {alert ? (
-                    <Animated isVisible={alertVisible}>
-                        {this.renderAlert(alert)}
-                    </Animated>
-                ) : null}
-                <a name="header"></a>
-                <Header
-                    links={[
-                        ["projects", "#projects"],
-                        ["contacts", "#contacts"],
-                    ]}
-                ></Header>
-                <ColumnAnimator>
-                    <div className="home-section">
-                        <a name="projects"></a>
-                        <ProjectLibrary
-                            searchTerm={hashtag}
-                        ></ProjectLibrary>
-                        <a name="blog"></a> 
-                        <Blog
-                            searchTerm={hashtag}
-                        ></Blog>
-                    </div>
-                    <div className="home-section">
-                        <a name="contacts"></a>
-                        <Contacts/>
-                    </div>
-                </ColumnAnimator>
-            </Container>
+                <Container className="home">
+                    {alert ? (
+                        <Animated isVisible={alertVisible}>
+                            {this.renderAlert(alert)}
+                        </Animated>
+                    ) : null}
+                    <a name="header"></a>
+                    <Header
+                        links={[
+                            ["projects", "#projects"],
+                            //["blog", "#blog"]
+                            ["contacts", "#contacts"],
+                        ]}
+                    ></Header>
+                    <ColumnAnimator>
+                        <div className="home-section">
+                            <a name="projects"></a>
+                            <ProjectLibrary
+                                searchTerm={hashtag}
+                            ></ProjectLibrary>
+                        </div>
+                        {/*
+                        <div className="home-section">
+                            <a name="blog"></a> 
+                            <Blog
+                                searchTerm={hashtag}
+                            ></Blog>
+                        </div>*/}
+                        <div className="home-section">
+                            <a name="contacts"></a>
+                            <Contacts parent={this}/>
+                        </div>
+                    </ColumnAnimator>
+                </Container>
+            </Fragment>
         );
     }
 

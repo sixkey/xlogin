@@ -14,11 +14,13 @@ import { Container } from "reactstrap";
 
 import "./Header.css";
 import XLogo from "components/XLogo/XLogo";
+import {useSiteData} from "react-static";
 
 ////// COMPONENT //////
 
 export default function Header(props) {
     const { links } = props;
+    const { title } = useSiteData()
     return (
         <Animated animateOnMount={false}>
             <Container className="page-header">
@@ -37,7 +39,7 @@ export default function Header(props) {
                         </a>
                     </div>
                     <div>
-                        <h1 className="mb-0">xkucerak</h1>
+                        <h1 className="mb-0 header-title">{title}</h1>
                         <div className="text-left link-row">
                             {links.map((link, index) => (
                                 <div key={index}>

@@ -14,8 +14,8 @@ import {useRouteData} from "react-static";
 
 ////// COMPONENT //////
 
-function Blog (props) {
-    let {blogPosts, sections } = useRouteData();
+export default function Blog (props) {
+    let { blogPosts, sections } = useRouteData();
     return (
         <Container>
             <XHub
@@ -30,7 +30,3 @@ function Blog (props) {
         </Container>
     );
 }
-
-////// EXPORTS //////
-
-export default Blog;

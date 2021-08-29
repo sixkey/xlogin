@@ -38,7 +38,7 @@ export const galleryItemFunction = (icons, posts) => {
                 logoSrc: null,
                 link: getPathMixed(item),
                 logoClassName: icons[item] ? icons[item] : "",
-                titleElem: <h3 className="absent-title">{posts[item].title}</h3>,
+                titleElem: (<h3 className="absent-title">{posts[item].title}</h3>),
             };
         }
         return {

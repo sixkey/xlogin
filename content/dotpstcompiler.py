@@ -343,11 +343,13 @@ def load_section(key: str, section: JSON, data: JSON, posts: Set[str]):
                 real_posts.append(post_key)
             else:
                 print('post {} not present'.format(post_key))
-        section['posts'] = real_posts
+        section['posts'] = sorted(real_posts)
 
 
 def embed_section(parent: JSON, section: JSON, keys: List[str]) -> None:
     post_attr = {}
+    if 'posts' not in section:
+        section['posts'] = []
     if not keys:
         return
     for index in range(len(keys)):

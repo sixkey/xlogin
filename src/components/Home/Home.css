@@ -1,7 +1,10 @@
 
 .home {
     padding-bottom:20vh;
+    position: relative;
+    z-index: 100;
 }
+
 
 .home-section {
     padding-top: 5em;
@@ -36,6 +39,20 @@
     top:1em;
     left:1em;
     font-size:1.5em;
+    padding:0.3em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    z-index: 200;
+    background-color: white;
+    border-radius: 1em;
+    -webkit-box-shadow: 0px 6px 29px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 29px -8px rgba(0,0,0,0.75);
+    box-shadow: 0px 6px 29px -8px rgba(0,0,0,0.75);
+}
+
+.go-to-top-animation {
+    z-index: 200; 
+    position: fixed;
 }
 
 .cont-wrap {

@@ -7,7 +7,7 @@ import PostPage from "components/PostPage/PostPage";
 import useScript from "libs/scripts";
 import React, { Fragment } from "react";
 import {useRouteData} from "react-static";
-import {getStaticPath} from "../../libs/paths";
+import {getSnipPath, getStaticPath} from "../../libs/paths";
 
 //// INTERNAL ////
 
@@ -36,7 +36,7 @@ export default function Snippet(props) {
     const snippetName = postid.substring(5)
     return (
         <Fragment>
-            <SpoolCanvas snippetName={snippetName} link={"#post-start"}></SpoolCanvas>
+            <SpoolCanvas snippetName={snippetName} link={getSnipPath(postid) + "#post-start"}></SpoolCanvas>
             <a name="post-start"></a>
             <PostPage/>
         </Fragment>

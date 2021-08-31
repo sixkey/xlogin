@@ -14,3 +14,7 @@
 .hub-logo {
     width: 40%;
 }
+
+.content-column { 
+    min-height: 80vh;
+}

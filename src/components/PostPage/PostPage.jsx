@@ -78,7 +78,7 @@ export default function PostPage(props) {
                             </Fragment>
                                 : null }
                         <hr />
-                        <div className="break-word">
+                        <div className="break-word pb-3">
                             <HashtagList
                                 hashtags={post.hashtags}
                             ></HashtagList>
@@ -86,7 +86,7 @@ export default function PostPage(props) {
                     </Col>
                     <Col
                         lg={{ offset: 0, size: 7 }}
-                        className={`text-left ${lg ? "pb-5" : ""}`}
+                        className={`content-column text-left ${lg ? "pb-5" : ""}`}
                     >   
                         <a name="post-title"></a>
                         <ContentEntrance posts={posts} postKey={postid} />

@@ -135,7 +135,7 @@ def read_pst(path):
             res["date"] = date
 
         return {
-            "res": res,
+           "res": res,
             "key": key
         }
 
@@ -196,7 +196,13 @@ def workWithSubText(f, a, b, TIT=None, initialCall=False, collapse=False, show=F
                     text = []
             else:
                 text.append(l.replace('\n', ''))
-
+    alignments = {
+        "([>": "right",
+        "([><": "center",
+        "([<": "left",
+        "([<>": "",
+        "([r": ""
+    }
     # If the last bulk compiled paragraph isn't the end of file, compile everything in the buffer
     # Every information other than the title flows through this if
     if(lastpart != b):
@@ -259,13 +265,6 @@ def workWithSubText(f, a, b, TIT=None, initialCall=False, collapse=False, show=F
                         buffer = []
                         buffer_type = ""
 
-                    alignments = {
-                        "([>": "right",
-                        "([><": "center",
-                        "([<": "left",
-                        "([<>": "",
-                        "([r": ""
-                    }
                     alignment = alignments[words[0]]
                 elif(words[0] == "$VV$"):
                     # If there is text in the buffer, that is not yet compiled, add it as paragraph
